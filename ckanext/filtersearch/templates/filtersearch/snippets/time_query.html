@@ -1,0 +1,34 @@
+{#
+Displays a  widget to define a temporal filter on the dataset search page sidebar
+
+#}
+
+{% resource 'mdedit/jquery.datetimepicker.full.js' %}
+{% resource 'mdedit/mdedit_datepicker.js' %}
+
+<section id="filter_time" class="module module-narrow module-shallow">
+  <h2 class="module-heading">
+    <i class="icon-medium icon-time"></i>
+    {{ _('Filter by time') }}
+    <a href="{{ h.remove_url_param(['id_time_start','id_time_end']) }}"
+      class="action">{{ _('Clear') }}</a>
+  </h2>
+  Start:<input type="text" data-module="mdedit_datepicker" label="Start" class="input form-control" id="id_time_start" name="time_start" style ="margin:5%"></input>
+  End:<input type="text" data-module="mdedit_datepicker" label="End" class="input form-control" id="id_time_end" name="time_end" style ="margin:5%"></input>
+
+
+  {#
+  {% set map_config = h.get_common_map_config() %}
+  <div class="dataset-map" data-module="spatial-query"
+    data-default_extent="{{ default_extent }}"
+    data-module-map_config="{{ h.dump_json(map_config) }}">
+    <div id="dataset-map-container"></div>
+  </div>
+  <div id="dataset-map-attribution">
+    {% snippet "spatial/snippets/map_attribution.html", map_config=map_config %}
+  </div>
+</section>
+
+{% resource 'ckanext-spatial/spatial_query' %}
+
+#}

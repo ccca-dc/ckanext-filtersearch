@@ -37,7 +37,14 @@ within_tertiary
   page and not the left column.
 
 #}
-
+{% macro label_function(name, item) %}
+{# iso_tpCat - json file mdedit Anja, 23.3.2017 #}
+{% if name == "extras_iso_tpCat" %}
+{{h.filtersearch_get_topic(name,item.name)}}
+{% else %}
+{{item.display_name}}
+{% endif %}
+{% endmacro %}
 
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}
@@ -59,24 +66,28 @@ within_tertiary
           {% endblock %}
           {% block facet_list_items %}
             {% with items = items or h.get_facet_items_dict(name) %}
-            {% set otto =  h.filtersearch_get_items(name) %}
-              {% if otto %}
-                <nav  ng-controller="MainCtrl" ng-init="init()">
-                  <p ng-init="init( {{otto}} )"></p>
-                  <p><input id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Filter" ng-click="filter_{{name}}.label = ' '"></p>
-                  {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
-                  <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
-                    <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:fmin"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
-                       <a ng-href="{ang x.href ang}" title="{ang x.label ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} {ang x.active ang}</span></a>
-                    </li>
-                  </ul>
-                </nav>
+            {% if items %}
+              <nav>
+                <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
+                  {% for item in items %}
+                    {% set href = h.remove_url_param(name, item.name, extras=extras, alternative_url=alternative_url) if item.active else h.add_url_param(new_params={name: item.name}, extras=extras, alternative_url=alternative_url) %}
+                    {% set label = label_function(name, item) if label_function else item.display_name %}
+                    {% set label_truncated = h.truncate(label, 22) if not label_function else label %}
+                    {% set count = count_label(item['count']) if count_label else ('(%d)' % item['count']) %}
+                      <li class="{{ nav_item_class or 'nav-item' }}{% if item.active %} active{% endif %}">
+                        <a href="{{ href }}" title="{{ label if label != label_truncated else '' }}">
+                          <span>{{ label_truncated }} {{ count }}</span>
+                        </a>
+                      </li>
+                  {% endfor %}
+                </ul>
+              </nav>
               <p class="module-footer">
               {% if h.get_param_int('_%s_limit' % name) %}
                 {% if h.has_more_facets(name) %}
                   <a href="{{ h.remove_url_param('_%s_limit' % name, replace=0, extras=extras, alternative_url=alternative_url) }}" class="read-more">{{ _('Show More {facet_type}').format(facet_type=title) }}</a>
                 {% endif %}
-              {% else %}
+             {% else %}
                 <a href="{{ h.remove_url_param('_%s_limit' % name, extras=extras, alternative_url=alternative_url) }}" class="read-more">{{ _('Show Only Popular {facet_type}').format(facet_type=title) }}</a>
               {% endif %}
             </p>
@@ -90,5 +101,3 @@ within_tertiary
     {% endif %}
   {% endwith %}
 {% endblock %}
-{% resource 'filtersearch/angular.js' %}
-{% resource 'filtersearch/ng.js' %}

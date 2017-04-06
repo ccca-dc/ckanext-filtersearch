@@ -20,7 +20,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
     # ITemplateHelpers
     def get_helpers(self):
         return {
-            'filtersearch_get_topic': helpers.filtersearch_get_topic
+            'filtersearch_get_topic': helpers.filtersearch_get_topic,
+            'filtersearch_get_items': helpers.filtersearch_get_items
         }
     # IFacets
 
@@ -38,17 +39,15 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict.pop('tags', None)
 
         # Add them
-        #facets_dict['extras_iso_exTempStart'] = 'Temporal Extend'
+        #facets_dict['extras_iso_exTempStart'] = 'Temporal Extend Start'
+        #facets_dict['extras_iso_exTempEnd'] = 'Temporal Extend End'
         #facets_dict['metadata_modified'] = 'Last modified'
         facets_dict['extras_iso_tpCat'] = 'Topics'
-        facets_dict['tags'] = 'Tags'
+        facets_dict['tags'] = 'Keywords'
         facets_dict['author'] = 'Authors'
-        facets_dict['maintainer'] = 'Maintainers'
         facets_dict['groups'] = 'Groups'
         facets_dict['organization'] = 'Organizations'
         facets_dict['res_format'] = 'Formats'
         facets_dict['license_id'] = 'Licenses'
-
-
 
         return facets_dict

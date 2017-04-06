@@ -1,0 +1,35 @@
+input.facet-filter, select.facet-filter {
+    margin: 5px;
+    width: auto;
+}
+
+input.facet-filter {
+    max-width: 60%;
+    margin-right: 0;
+}
+
+.collapsed .icon-chevron:before {
+    content:          "\f078";
+}
+
+.filtersearch_tag {
+    display:          inline-block;
+    margin-bottom:    4px;
+    color:            #000000;
+    background-color: #ffffff;
+    padding:          1px 10px;
+    border:           1px solid #dddddd;
+    -webkit-box-shadow: inset 0 1px 0 #ffffff;
+    -moz-box-shadow:  inset 0 1px 0 #ffffff;
+    box-shadow:       inset 0 1px 0 #ffffff;
+}
+
+a.filtersearch_tag:hover {
+    text-decoration:  none;
+    color:            #ffffff;
+    background-color: #1f3a93;
+    border:           1px solid #ffffff;
+    -webkit-box-shadow: inset 0 1px 0 #3d97b3;
+    -moz-box-shadow:  inset 0 1px 0 #3d97b3;
+    box-shadow:       inset 0 1px 0 #3d97b3;
+}

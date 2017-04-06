@@ -1,0 +1,23 @@
+{% ckan_extends %}
+
+{% block secondary_content %}
+
+<h1 class="module-heading"><i class="icon-large icon-search"></i>Filter and Search</h1>
+<div class="module-content"><p>Find various options for searching and filtering datasets below.</p></div>
+{% snippet "spatial/snippets/spatial_query.html" %}
+
+	{{ super() }}
+{% endblock %}
+
+{% block package_search_results_list %}
+{{ super() }}
+{% endblock %}
+
+{% block primary_content %}
+{{ super() }}
+{% endblock %}
+
+
+{% block search_title %}
+{{ super() }}
+{% endblock %}

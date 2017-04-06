@@ -49,7 +49,7 @@ setup(
 
 
     # What does your project relate to?
-    keywords='''CKAN earch filter''',
+    keywords='''CKAN search filter options''',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
@@ -60,6 +60,10 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/technical.html#install-requires-vs-requirements-files
     install_requires=[],
+
+    # from b2find - Anja March 2017
+    #namespace_packages=['ckanext', 'ckanext.filtersearch'],
+
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these

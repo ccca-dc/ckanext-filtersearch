@@ -37,9 +37,17 @@ within_tertiary
   page and not the left column.
 
 #}
-
+{% macro label_function(name, item) %}
+{# iso_tpCat - json file mdedit Anja, 23.3.2017 #}
+{% if name == "extras_iso_tpCat" %}
+{{h.filtersearch_get_topic(name,item.name)}}
+{% else %}
+{{item.display_name}}
+{% endif %}
+{% endmacro %}
 
 {% block facet_list %}
+
   {% set hide_empty = hide_empty or false %}
   {% with items = items or h.get_facet_items_dict(name) %}
     {% if items or not hide_empty %}
@@ -58,25 +66,45 @@ within_tertiary
             </h2>
           {% endblock %}
           {% block facet_list_items %}
-            {% with items = items or h.get_facet_items_dict(name) %}
-            {% set otto =  h.filtersearch_get_items(name) %}
-              {% if otto %}
-                <nav  ng-controller="MainCtrl" ng-init="init()">
-                  <p ng-init="init( {{otto}} )"></p>
-                  <p><input id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Filter" ng-click="filter_{{name}}.label = ' '"></p>
-                  {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
-                  <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
-                    <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:fmin"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
-                       <a ng-href="{ang x.href ang}" title="{ang x.label ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} {ang x.active ang}</span></a>
-                    </li>
-                  </ul>
-                </nav>
+
+          {% with items = items or h.get_facet_items_dict(name) %}
+          {% set otto = h.filtersearch_get_items(name) %}
+            {% if otto %}
+
+              <nav>
+                <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
+              {#}  <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}" ng-app="filtersearchApp" ng-init="{{otto}}">{#}
+
+                  {% for item in otto %}
+
+                      <li class="{{ nav_item_class or 'nav-item' }}{% if item.active %} active{% endif %}">
+                        <a href="{{ item.href }}" title="{{ item.label if item.label != item.label_truncated else '' }}">
+                          <span>{{ item.label_truncated }} {{ item.count }}</span>
+                        </a>
+                     </li>
+                  {% endfor %}
+                </ul>
+              </nav>
+
+                  {#}
+                    <p>Input something in the input box:</p>
+                    <p>Name: <input id="id_{{name}}"type="text" ng-model="filter_{{name}}"></p>
+                    <p> {ang filter_{{name|e}} ang}  Should appear here</p>
+                    {{name}}
+                  <li class="{{ nav_item_class or 'nav-item' }}"
+                     ng-repeat="x in itemlist | filter_{{name}}">
+                     <a href="{ang x.href ang}" title="{ang x.label if x.label != x.label_truncated else '' ang}">
+                       <span>{ang x.label_truncated ang} {ang x.count ang}</span>
+                     </a>
+                  </li>
+                </ul>
+                {#}
               <p class="module-footer">
               {% if h.get_param_int('_%s_limit' % name) %}
                 {% if h.has_more_facets(name) %}
                   <a href="{{ h.remove_url_param('_%s_limit' % name, replace=0, extras=extras, alternative_url=alternative_url) }}" class="read-more">{{ _('Show More {facet_type}').format(facet_type=title) }}</a>
                 {% endif %}
-              {% else %}
+             {% else %}
                 <a href="{{ h.remove_url_param('_%s_limit' % name, extras=extras, alternative_url=alternative_url) }}" class="read-more">{{ _('Show Only Popular {facet_type}').format(facet_type=title) }}</a>
               {% endif %}
             </p>
@@ -92,3 +120,4 @@ within_tertiary
 {% endblock %}
 {% resource 'filtersearch/angular.js' %}
 {% resource 'filtersearch/ng.js' %}
+{% resource 'filtersearch/localforage.js' %}

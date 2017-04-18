@@ -41,6 +41,11 @@ ckanext-filtersearch
 Requirements
 ------------
 
+define: in ini
+
+ ckanext.filtersearch.topic_field = iso_tpCat
+
+
 For example, you might want to mention here which versions of CKAN this
 extension works with.
 

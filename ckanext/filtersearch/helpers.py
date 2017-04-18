@@ -1,3 +1,10 @@
+try:
+    # CKAN 2.7 and later
+    from ckan.common import config
+except ImportError:
+    # CKAN 2.6 and earlier
+    from pylons import config
+
 import re
 import datetime
 import pytz
@@ -9,8 +16,7 @@ import json
 import ckan.logic as logic
 get_action = logic.get_action
 
-
-import  ckan.plugins.toolkit as tk
+  ckan.plugins.toolkit as tk
 context = tk.c
 import ckan.lib.base as base
 Base_c = base.c
@@ -23,36 +29,34 @@ import pprint # Pretty Print oif dicts :-)
 import ckan.lib.helpers as h
 import json
 
-
 from ckan.common import (
     _, ungettext, g, c, request, session, json, OrderedDict
 )
 
+def filtersearch_get_topic_field():
+    topic_field = config.get(
+        'ckanext.filtersearch.topic_field', False)
+
+    if topic_field:
+        return 'extras_' + topic_field
+    else:
+        return None
+
 def filtersearch_get_items(facet):
+
      items = h.get_facet_items_dict(facet,0) # = means alqway get all ...
-     #print ("************************************************Anja")
+
      for x in items:
          x['href'] = h.remove_url_param(facet, x['name']) if x['active'] else h.add_url_param(new_params={facet: x['name']})
-         x['label'] = filtersearch_get_topic(facet, x['name'])  if facet == "extras_iso_tpCat" else x['display_name']
-         x['label_truncated'] = h.truncate(x['label'], 22) if facet != "extras_iso_tpCat" else x['label']
+         x['label'] = filtersearch_get_topic(facet, x['name']) if facet == filtersearch_get_topic_field() else x['display_name']
+         x['label_truncated'] = h.truncate(x['label'], 22) if facet !=  filtersearch_get_topic_field() else x['label']
          x['count'] = ('(%d)' % x['count'])
          x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
 
-    # remove unicode ....
+    # remove unicode .... only by dumping to json ...
+     result = json.dumps(items)
 
-     #print ("Anja ---- No of Items: " + str(len(items)))
-     for item in items:
-         for k, v in item.iteritems():
-        #    print (k +": " + str(item[k]))
-            try:
-                item[k] = v.encode('utf-8')
-            except:
-                continue
-
-    #item = dict((str(k), str(v)) for k, v in item.items())
-
-
-     return items
+     return result
 
 def filtersearch_get_topic(field, value):
     #print "#####################################"

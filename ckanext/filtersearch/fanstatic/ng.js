@@ -10,16 +10,19 @@ app.config(['$interpolateProvider', function($interpolateProvider) {
   $interpolateProvider.endSymbol('ang}');
 }]);
 app.controller('MainCtrl', ['$scope', function ($scope) {
-  $scope.itemlist = null;
+  $scope.itemlist = "";
+
   $scope.init = function(value) {
+
     if (!value)
       return;
-    $scope.itemlist = value;
-    $scope.fmin =10;
-    $scope.fmax = 100;
-    $scope.illen = value.length;
 
-   for (var i =0; i <value.length;i++)
-      console.log(value[i]);
+  console.log(value);
+  $scope.itemlist = value;
+  $scope.fmin =10;
+  $scope.fmax = 100;
+  $scope.illen = value.length;
+
+
   }
 }]);

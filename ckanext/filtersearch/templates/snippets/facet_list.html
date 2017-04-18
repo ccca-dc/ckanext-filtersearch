@@ -63,11 +63,11 @@ within_tertiary
               {% if otto %}
                 <nav  ng-controller="MainCtrl" ng-init="init()">
                   <p ng-init="init( {{otto}} )"></p>
-                  <p><input id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Filter" ng-click="filter_{{name}}.label = ' '"></p>
+                  <p><input id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Filter" ng-click="filter_{{name}}.label = ''"></p>
                   {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
                   <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
                     <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:fmin"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
-                       <a ng-href="{ang x.href ang}" title="{ang x.label ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} {ang x.active ang}</span></a>
+                       <a ng-href="{ang x.href ang}" title="{ang x.label ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
                     </li>
                   </ul>
                 </nav>

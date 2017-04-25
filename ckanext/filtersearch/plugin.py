@@ -25,7 +25,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IFacets)
     plugins.implements(plugins.ITemplateHelpers)
-    plugins.implements(plugins.IRoutes, inherit=True)
+    #plugins.implements(plugins.IRoutes, inherit=True)
 
 
 
@@ -49,6 +49,10 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
+        return self._facets(facets_dict)
+    def group_facets(self, facets_dict, group_type, package_type):
+        return self._facets(facets_dict)
+    def organization_facets(self, facets_dict, organization_type, package_type):
         return self._facets(facets_dict)
 
     def _facets(self, facets_dict):
@@ -74,8 +78,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
         facets_dict['tags'] = 'Keywords'
         facets_dict['author'] = 'Authors'
-        facets_dict['groups'] = 'Groups'
-        facets_dict['organization'] = 'Organizations'
+        #facets_dict['groups'] = 'Groups'
+        #facets_dict['organization'] = 'Organizations'
         facets_dict['res_format'] = 'Formats'
         facets_dict['license_id'] = 'Licenses'
 

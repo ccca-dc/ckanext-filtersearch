@@ -1,9 +1,9 @@
-console.log("Hi");
+//console.log("Hi");
 
 var app = angular.module('filtersearchApp', []);
-console.log("H2");
+//console.log("H2");
 // Change Angular special bracets because they collide with Jinja :-) - Anja 4.4.2017
-// It is also possible to use the following expression and do not change angualr delimiters:
+// It is also possible to use the following expression and do not change angular delimiters:
 // {{ '{{myname}}' }}
 app.config(['$interpolateProvider', function($interpolateProvider) {
   $interpolateProvider.startSymbol('{ang');
@@ -17,7 +17,7 @@ app.controller('MainCtrl', ['$scope', function ($scope) {
     if (!value)
       return;
 
-  console.log(value);
+  //console.log(value);
   $scope.itemlist = value;
   $scope.fmin =10;
   $scope.fmax = 100;

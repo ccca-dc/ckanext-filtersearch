@@ -62,7 +62,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict.pop('organization', None)
         facets_dict.pop('license_id', None)
         facets_dict.pop('res_format', None)
-        facets_dict.pop('groups', None)
+        #facets_dict.pop('groups', None)
         facets_dict.pop('tags', None)
 
         # Add them
@@ -72,14 +72,14 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
 
         if self._topic_field:
-            facets_dict[self._topic_field] = 'Topics'
+            facets_dict[self._topic_field] = 'Topics MD'
 
         #print self._topic_field
 
         facets_dict['tags'] = 'Keywords'
         facets_dict['author'] = 'Authors'
-        #facets_dict['groups'] = 'Groups'
-        #facets_dict['organization'] = 'Organizations'
+        facets_dict['groups'] = 'Topics'
+        facets_dict['organization'] = 'Organizations/Projects'
         facets_dict['res_format'] = 'Formats'
         facets_dict['license_id'] = 'Licenses'
 

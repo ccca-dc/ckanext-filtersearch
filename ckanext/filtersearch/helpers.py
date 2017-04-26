@@ -42,22 +42,21 @@ def filtersearch_get_topic_field():
     else:
         return None
 
-def filtersearch_get_items(facet):
+def filtersearch_get_items(facet,extras):
 
      items = h.get_facet_items_dict(facet,0) # = means alqway get all ...
-
-
      if facet == filtersearch_get_topic_field():
          for x in items:
-             x['href'] = h.remove_url_param(facet, x['name']) if x['active'] else h.add_url_param(new_params={facet: x['name']})
+             x['href'] = h.remove_url_param(facet, x['name'],extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
              x['label'] = filtersearch_get_topic(facet, x['name'])
              x['display_name'] = filtersearch_get_topic(facet, x['name'])
-             x['label_truncated'] =h.truncate(x['label'], 22) 
+             x['label_truncated'] =h.truncate(x['label'], 22)
              x['count'] = ('(%d)' % x['count'])
              x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
+            
      else:
          for x in items:
-             x['href'] = h.remove_url_param(facet, x['name']) if x['active'] else h.add_url_param(new_params={facet: x['name']})
+             x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
              x['label'] =  x['display_name']
              x['label_truncated'] = h.truncate(x['label'], 22)
              x['count'] = ('(%d)' % x['count'])

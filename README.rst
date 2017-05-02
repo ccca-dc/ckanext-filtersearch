@@ -45,6 +45,8 @@ DEFINE: in development.ini/production.ini
 
  ckanext.filtersearch.topic_field = xxxx
 
+ depends on spatial extension :-)
+
 
 
 

@@ -10,6 +10,10 @@ app.config(['$interpolateProvider', function($interpolateProvider) {
   $interpolateProvider.endSymbol('ang}');
 }]);
 app.controller('MainCtrl', ['$scope', function ($scope) {
+  $scope.facetMinLimit = 10;
+  $scope.facetMaxLimit = 100;
+
+
   $scope.itemlist = "";
 
   $scope.init = function(value) {
@@ -18,10 +22,13 @@ app.controller('MainCtrl', ['$scope', function ($scope) {
       return;
 
   //console.log(value);
+
   $scope.itemlist = value;
   $scope.fmin =10;
   $scope.fmax = 100;
   $scope.illen = value.length;
+  $scope.limit =10;
+
 
 
   }

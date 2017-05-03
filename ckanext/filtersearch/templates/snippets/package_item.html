@@ -1,0 +1,33 @@
+{#
+Displays a single of dataset.
+
+package        - A package to display.
+item_class     - The class name to use on the list item.
+hide_resources - If true hides the resources (default: false).
+banner         - If true displays a popular banner (default: false).
+truncate       - The length to trucate the description to (default: 180)
+truncate_title - The length to truncate the title to (default: 80).
+
+Example:
+
+{% snippet 'snippets/package_item.html', package=c.datasets[0] %}
+
+#}
+{% ckan_extends %}
+
+
+      {% block resources %}
+        {% if package.resources and not hide_resources %}
+          {% block resources_outer %}
+            <ul class="dataset-resources unstyled">
+              {% block resources_inner %}
+                {% for resource in package.resources %}
+                <li>
+                  <a href="{{ h.url_for(controller='package', action='resource_read', id=package.id, resource_id=resource.id) }}" class="label" data-format="{{ resource.lower() }}">{{ resource.name }}</a>
+                </li>
+                {% endfor %}
+              {% endblock %}
+            </ul>
+          {% endblock %}
+        {% endif %}
+      {% endblock %}

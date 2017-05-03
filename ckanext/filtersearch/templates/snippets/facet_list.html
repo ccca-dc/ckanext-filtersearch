@@ -56,7 +56,7 @@ within_tertiary
         <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
           {% block facet_list_heading %}
 
-              <h2 class="module-heading accordion-toggle" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="{{ottocount}} matches">
+              <h2 class="module-heading accordion-toggle" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{ottocount}}">
               <i class="icon-medium icon-filter"></i>
               {% set title = title or h.get_facet_title(name) %}
               {{ title }}

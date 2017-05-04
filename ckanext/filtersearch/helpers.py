@@ -44,7 +44,7 @@ def filtersearch_get_topic_field():
 
 def filtersearch_get_items(facet,extras):
 
-     items = h.get_facet_items_dict(facet) # = means alqway get all ...
+     items = h.get_facet_items_dict(facet,0) # 0 is important! means alqway get all ...
      if facet == filtersearch_get_topic_field():
          for x in items:
              x['href'] = h.remove_url_param(facet, x['name'],extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)

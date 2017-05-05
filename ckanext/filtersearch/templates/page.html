@@ -1,10 +1,5 @@
 {%ckan_extends %}
 
-{%- block page -%}
-{{ super() }}
-
-
-
     {% block secondary %}
       <aside class="secondary span3" ng-app="filtersearchApp">
         {#
@@ -22,5 +17,3 @@
         {% block secondary_content %}{% endblock %}
       </aside>
     {% endblock %}
-
-  {% endblock -%}

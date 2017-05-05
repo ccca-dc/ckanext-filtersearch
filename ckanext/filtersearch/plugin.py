@@ -62,8 +62,9 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict.pop('organization', None)
         facets_dict.pop('license_id', None)
         facets_dict.pop('res_format', None)
-        #facets_dict.pop('groups', None)
+        facets_dict.pop('groups', None)
         facets_dict.pop('tags', None)
+        #facets_dict.pop('author', None)
 
         # Add them
         #facets_dict['extras_iso_exTempStart'] = 'Temporal Extend Start'

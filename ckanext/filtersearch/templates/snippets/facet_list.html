@@ -38,10 +38,12 @@ within_tertiary
 
 #}
 
+
 {% set facet_id = title|lower %}
 {% set otto =  h.filtersearch_get_items(name, extras) %}
-{% set ottocount =  otto.count('count') %}
-
+{% if otto %}
+  {% set ottocount =  otto.count('count') %}
+{% endif %}
 
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}
@@ -68,12 +70,11 @@ within_tertiary
 
               {% if otto %}
                 <nav>
-                  {% if name != "groups" and name != "extras_iso_tpCat" %}
+                  {% if  ottocount > 10 %}
                   <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
-                  {% else %}
-                  <p><input  id="id_{{name}}" type="hidden" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
                   {% endif %}
                   {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
+
                   <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
                     <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:limit"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
                        <a ng-href="{ang x.href ang}" title="{ang x.label ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
@@ -95,5 +96,5 @@ within_tertiary
     {% endif %}
   {% endwith %}
 {% endblock %}
-{% resource 'filtersearch/angular.js' %}
-{% resource 'filtersearch/ng.js' %}
+
+{% resource 'filtersearch/angular' %}

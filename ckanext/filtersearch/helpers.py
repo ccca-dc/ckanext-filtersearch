@@ -112,6 +112,7 @@ def filtersearch_get_bbox(query_string):
 
 def filtersearch_get_date_value(query_string, q_field):
 
+
     index = query_string.find(q_field)
 
     if index == -1:
@@ -127,7 +128,7 @@ def filtersearch_get_date_value(query_string, q_field):
     if len (return_value) < 2:
         return ""
 
-    if return_value[1] == '&':
+    if return_value[0] == '&':
         return ""
     else:
         return return_value

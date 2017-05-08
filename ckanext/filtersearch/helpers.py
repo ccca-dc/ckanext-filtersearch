@@ -87,3 +87,47 @@ def filtersearch_get_topic(field, value):
         return value
     #print result
     return result
+
+def filtersearch_get_bbox(query_string):
+
+    q_field = 'ext_bbox'
+
+    index = query_string.find(q_field)
+
+    if index == -1:
+        return ""
+
+    mystring = query_string.split(q_field)
+
+    if len (mystring) < 2:
+        return ""
+
+    if len (mystring[1]) < 2:
+        return ""
+
+    if  mystring[1][1] == '&':   #means empty, .i.e. not set'
+        return ""
+    else:
+        return "true"
+
+def filtersearch_get_date_value(query_string, q_field):
+
+    index = query_string.find(q_field)
+
+    if index == -1:
+        return ""
+
+    mystring = query_string.split(q_field)
+
+    if len (mystring) < 2:
+        return ""
+
+    return_value = mystring[1][1:5]
+
+    if len (return_value) < 2:
+        return ""
+
+    if return_value[1] == '&':
+        return ""
+    else:
+        return return_value

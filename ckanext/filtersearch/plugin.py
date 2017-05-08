@@ -41,7 +41,9 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         return {
             'filtersearch_get_topic': helpers.filtersearch_get_topic,
             'filtersearch_get_items': helpers.filtersearch_get_items,
-            'filtersearch_get_topic_field': helpers.filtersearch_get_topic_field
+            'filtersearch_get_topic_field': helpers.filtersearch_get_topic_field,
+            'filtersearch_get_bbox': helpers.filtersearch_get_bbox,
+            'filtersearch_get_date_value': helpers.filtersearch_get_date_value
         }
 
     def topic_field (self):

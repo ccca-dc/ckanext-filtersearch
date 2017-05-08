@@ -45,7 +45,11 @@ DEFINE: in development.ini/production.ini
 
  ckanext.filtersearch.topic_field = xxxx
 
- depends on spatial extension :-)
+ depends on spatial extension as spatial_query called here
+
+ aöso checks whether spatial extend and time extend have been selected (datesearch)
+
+
 
 
 

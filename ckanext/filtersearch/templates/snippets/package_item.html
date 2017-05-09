@@ -28,15 +28,29 @@ Example:
   {% if package.resources and not hide_resources %}
     {% block resources_outer %}
       <div id="resources-{{ package.name }}" class="collapse">
-      <ul class="list-group">
+      <hr />
+      <table class="resource-table table table-hover">
+        <thead>
+        <tr>
+          <th> Name </th>
+          <th> Format </th>
+          <th> Creation Date </th>
+        </tr>
+        </thead>
         {% block resources_inner %}
+        <tbody>
           {% for resource in package.resources %}
-          <li class="list-group-item">
-            <a href="{{ h.url_for(controller='package', action='resource_read', id=package.id, resource_id=resource.id) }}" class="list-group-item">{{ resource.name }}</a>
-          </li>
+          <tr>
+            <td>
+              <a href="{{ h.url_for(controller='package', action='resource_read', id=package.id, resource_id=resource.id) }}" class="list-group-item">{{ resource.name }}</a>
+            </td>
+            <td>{{ resource.format }}</td>
+            <td>{{ h.render_datetime(resource.created, "%Y-%m-%d") }}</td>
+          </tr>
           {% endfor %}
+        </tbody>
         {% endblock %}
-      </ul>
+      </table>
       </div>
     {% endblock %}
   {% endif %}

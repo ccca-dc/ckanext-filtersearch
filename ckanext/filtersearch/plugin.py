@@ -90,6 +90,10 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
     # IPackageController
     def after_search(self, search_results, search_params):
+        print("Params  -------------------------------------")
+        pprint.pprint(search_params)
+        print("Results -------------------------------------")
+        pprint.pprint(search_results)
         # Extract resource facet params from fq 
         try:
             fq = toolkit.get_or_bust(search_params, 'fq') 

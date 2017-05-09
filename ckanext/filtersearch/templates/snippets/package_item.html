@@ -18,8 +18,12 @@ Example:
 
 {% block heading_title %}
   <div>
+  <div>
     {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
+  </div>
+  <div>
     <h3 href="#resources-{{ package.name }}" class="btn pull-right" data-toggle="collapse">Resources <span class="badge">{{ package.resources|length }}</span></h3>
+  </div>
   </div>
 {% endblock %}
 

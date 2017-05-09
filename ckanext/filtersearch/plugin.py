@@ -85,15 +85,16 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict['groups'] = 'Groups'
         facets_dict['res_format'] = 'Formats'
         facets_dict['license_id'] = 'Licenses'
+        facets_dict['res_extras_experiment'] = 'Experiment'
 
         return facets_dict
 
     # IPackageController
     def after_search(self, search_results, search_params):
-        print("Params  -------------------------------------")
-        pprint.pprint(search_params)
-        print("Results -------------------------------------")
-        pprint.pprint(search_results)
+        #print("Params  -------------------------------------")
+        #pprint.pprint(search_params)
+        #print("Results -------------------------------------")
+        #pprint.pprint(search_results)
         # Extract resource facet params from fq 
         try:
             fq = toolkit.get_or_bust(search_params, 'fq') 
@@ -107,7 +108,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                         res_format = res_format[1:-1]
                     pkg['resources'] = [ d for d in pkg.get('resources','') if d.get('format','') == res_format ] 
 
-                    pprint.pprint(pkg)
+                    #pprint.pprint(pkg)
         except Exception as e:
             print(e)
 

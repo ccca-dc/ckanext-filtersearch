@@ -1,0 +1,61 @@
+{#
+Displays a single of dataset.
+
+package        - A package to display.
+item_class     - The class name to use on the list item.
+hide_resources - If true hides the resources (default: false).
+banner         - If true displays a popular banner (default: false).
+truncate       - The length to trucate the description to (default: 180)
+truncate_title - The length to truncate the title to (default: 80).
+
+Example:
+
+{% snippet 'snippets/package_item.html', package=c.datasets[0] %}
+
+#}
+{% ckan_extends %}
+
+
+{% block heading_title %}
+  <div>
+  <div>
+    {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
+  </div>
+  <div>
+    <h3 href="#resources-{{ package.name }}" class="btn pull-right" data-toggle="collapse">Resources <span class="badge">{{ package.resources|length }}</span></h3>
+  </div>
+  </div>
+{% endblock %}
+
+
+{% block resources %}
+  {% if package.resources and not hide_resources %}
+    {% block resources_outer %}
+      <div id="resources-{{ package.name }}" class="collapse">
+      <hr />
+      <table class="resource-table table table-hover">
+        <thead>
+        <tr>
+          <th> Name </th>
+          <th> Format </th>
+          <th> Creation Date </th>
+        </tr>
+        </thead>
+        {% block resources_inner %}
+        <tbody>
+          {% for resource in package.resources %}
+          <tr>
+            <td>
+              <a href="{{ h.url_for(controller='package', action='resource_read', id=package.id, resource_id=resource.id) }}" class="list-group-item">{{ resource.name }}</a>
+            </td>
+            <td>{{ resource.format }}</td>
+            <td>{{ h.render_datetime(resource.created, "%Y-%m-%d") }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        {% endblock %}
+      </table>
+      </div>
+    {% endblock %}
+  {% endif %}
+{% endblock %}

@@ -33,3 +33,7 @@ a.filtersearch_tag:hover {
     -moz-box-shadow:  inset 0 1px 0 #3d97b3;
     box-shadow:       inset 0 1px 0 #3d97b3;
 }
+
+.resource-table {
+    table-layout: auto !important;
+}

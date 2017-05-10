@@ -7,6 +7,7 @@ except ImportError:
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckanext.filtersearch import helpers
+import pprint
 
 
 def get_topic_field():
@@ -26,6 +27,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IFacets)
     plugins.implements(plugins.ITemplateHelpers)
     #plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IPackageController, inherit=True)
 
 
 
@@ -85,5 +87,33 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict['groups'] = 'Groups'
         facets_dict['res_format'] = 'Formats'
         facets_dict['license_id'] = 'Licenses'
+        facets_dict['res_extras_experiment'] = 'Experiment'
 
         return facets_dict
+
+    # IPackageController
+    def after_search(self, search_results, search_params):
+        #print("Params  -------------------------------------")
+        #pprint.pprint(search_params)
+        #print("Results -------------------------------------")
+        #pprint.pprint(search_results)
+        # Extract resource facet params from fq 
+        try:
+            fq = toolkit.get_or_bust(search_params, 'fq') 
+            if ( fq[0].find('res_format') != -1 ):
+                fq_res = fq[0][fq[0].find('res_format')::].split(' ')[0]
+
+                # Filter resources from package_search result
+                for pkg in search_results['results']:
+                    res_format = fq_res.split(':')[-1]
+                    if res_format.startswith('"') and res_format.endswith('"'):
+                        res_format = res_format[1:-1]
+                    pkg['resources'] = [ d for d in pkg.get('resources','') if d.get('format','') == res_format ] 
+
+                    #pprint.pprint(pkg)
+        except Exception as e:
+            print(e)
+
+        
+
+        return search_results

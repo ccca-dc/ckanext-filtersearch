@@ -37,3 +37,6 @@ a.filtersearch_tag:hover {
 .resource-table {
     table-layout: auto !important;
 }
+.resource_facet_hint{
+  background-color: #b55457;
+}

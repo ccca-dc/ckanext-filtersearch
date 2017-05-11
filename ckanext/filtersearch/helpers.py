@@ -32,6 +32,13 @@ import json
 from ckan.common import (
     _, ungettext, g, c, request, session, json, OrderedDict
 )
+def filtersearch_check_resource_field(field):
+    ' fields see plugin.py after_search'
+    search_items = ["res_format", "res_extras_par_frequency", "res_extras_par_model", "res_extras_par_experiment","res_extras_par_variables","res_extras_par_ensemble"]
+    if field in search_items:
+        return True
+    else:
+        return False
 
 def filtersearch_get_topic_field():
     topic_field = config.get(
@@ -45,6 +52,8 @@ def filtersearch_get_topic_field():
 def filtersearch_get_items(facet,extras):
 
      items = h.get_facet_items_dict(facet,0) # 0 is important! means alqway get all ...
+     #if facet == "par_experiment":
+        # print  json.dumps(items)
      if facet == filtersearch_get_topic_field():
          for x in items:
              x['href'] = h.remove_url_param(facet, x['name'],extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)

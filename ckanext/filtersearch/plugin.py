@@ -8,6 +8,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckanext.filtersearch import helpers
 import pprint
+import re
 
 
 def get_topic_field():
@@ -45,7 +46,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             'filtersearch_get_items': helpers.filtersearch_get_items,
             'filtersearch_get_topic_field': helpers.filtersearch_get_topic_field,
             'filtersearch_get_bbox': helpers.filtersearch_get_bbox,
-            'filtersearch_get_date_value': helpers.filtersearch_get_date_value
+            'filtersearch_get_date_value': helpers.filtersearch_get_date_value,
+            'filtersearch_check_resource_field': helpers.filtersearch_check_resource_field
         }
 
     def topic_field (self):
@@ -85,9 +87,14 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict['author'] = 'Authors'
         facets_dict['organization'] = 'Organizations'
         facets_dict['groups'] = 'Groups'
-        facets_dict['res_format'] = 'Formats'
         facets_dict['license_id'] = 'Licenses'
-        facets_dict['res_extras_experiment'] = 'Experiment'
+        facets_dict['res_format'] = 'Formats'
+        facets_dict['res_extras_par_model'] = 'Model'
+        facets_dict['res_extras_par_experiment'] = 'Experiment'
+        facets_dict['res_extras_par_frequency'] = 'Frequency'
+        facets_dict['res_extras_par_variables'] = 'Variables'
+        facets_dict['res_extras_par_ensemble'] = 'Ensemble'
+
 
         return facets_dict
 
@@ -97,23 +104,77 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         #pprint.pprint(search_params)
         #print("Results -------------------------------------")
         #pprint.pprint(search_results)
-        # Extract resource facet params from fq 
+        # Extract resource facet params from fq
+
+        search_items = ["res_format", "res_extras_par_frequency", "res_extras_par_model", "res_extras_par_experiment","res_extras_par_variables","res_extras_par_ensemble"]
+        package_text = ["format", "par_frequency", "par_model", "par_experiment","par_variables","par_ensemble" ]
+        max_values_per_item = 40
+        num_search_items = len (search_items)
+        search_values = [[None for x in range(len(search_items))] for y in range(max_values_per_item)]
+
+
+        fq = toolkit.get_or_bust(search_params, 'fq')
+        #print (fq)
+
+        if (fq[0].find('res_format') == -1) and (fq[0].find('par_') == -1):
+            return search_results
+        len_s = len(search_items)
+        #print "otto"
+        i = -1
+        for item in search_items:
+            i += 1
+            if fq[0].find(search_items[i]) == -1:
+                continue
+            x = [m.start() for m in re.finditer(search_items[i], fq[0])]
+            j = -1
+            for val in x:
+                j += 1
+                tmp_str = fq[0][val:-1].split(' ')[0]
+                tmp_str =  tmp_str.split(':')[1]
+                if tmp_str.startswith('"') and tmp_str.endswith('"'):
+                    tmp_str = tmp_str[1:-1]
+                search_values[i][j] = tmp_str
+                #print tmp_str
+
+        #print search_values
         try:
-            fq = toolkit.get_or_bust(search_params, 'fq') 
-            if ( fq[0].find('res_format') != -1 ):
-                fq_res = fq[0][fq[0].find('res_format')::].split(' ')[0]
+              # Filter resources from package_search result :
+              # logical or within one facet logical and across all facets
+              for pkg in search_results['results']:
+                  pkg['total_resources'] = len(pkg['resources'])
+                  resource_list = pkg['resources']
+                  new_resource_list = []
+                  for resource in resource_list:
+                      num_matches = [False for x in range(num_search_items)]
+                      for i in range(num_search_items):
+                          #print search_values[i][0]
+                          if search_values[i][0] == None:
+                              #print "None Found: " + str(i)
+                              num_matches[i] = True     # ie. parameter was not specified
+                              continue
+                          for j in range (len(search_values[i])):
+                              if search_values[i][j] == None:
+                                 break
+                              #print resource
+                              #print search_values[i][j]
+                              #print resource.get(package_text[i])
+                              #print resource.get('par_variables')
+                              if resource.get(package_text[i]) == search_values[i][j]:
+                                 num_matches[i] = True
 
-                # Filter resources from package_search result
-                for pkg in search_results['results']:
-                    res_format = fq_res.split(':')[-1]
-                    if res_format.startswith('"') and res_format.endswith('"'):
-                        res_format = res_format[1:-1]
-                    pkg['resources'] = [ d for d in pkg.get('resources','') if d.get('format','') == res_format ] 
+                      append_resource = True
+                      #print num_matches
+                      for i in range (num_search_items):
+                          if num_matches[i] == False:
+                             append_resource = False
 
-                    #pprint.pprint(pkg)
+                      if append_resource:
+                          new_resource_list.append(resource)
+
+                  pkg['resources'] = new_resource_list
+
+
         except Exception as e:
-            print(e)
-
-        
+            print("Exception: " + str(e))
 
         return search_results

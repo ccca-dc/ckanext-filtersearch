@@ -40,9 +40,9 @@ within_tertiary
 
 
 {% set facet_id = title|lower %}
-{% set otto =  h.filtersearch_get_items(name, extras) %}
-{% if otto %}
-  {% set ottocount =  otto.count('count') %}
+{% set my_items =  h.filtersearch_get_items(name, extras) %}
+{% if my_items %}
+  {% set my_items_count =  my_items.count('count') %}
 {% endif %}
 
 {% block facet_list %}
@@ -55,10 +55,21 @@ within_tertiary
         {% set wrapper_class = 'nav-facet nav-facet-tertiary' %}
       {% endif %}
       {% block facet_list_item %}
+      {% if name == "res_format" %}
+      <section>
+
+            <h3 class="module-heading" >
+            {% set title = "Resource Filters:" %}
+            <i>{{ title }}</i>
+          </h3>
+
+        </section>
+        {% endif %}
+
         <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
           {% block facet_list_heading %}
 
-              <h2 class="module-heading accordion-toggle" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{ottocount}}">
+              <h2 class="module-heading accordion-toggle" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">
               <i class="icon-medium icon-filter"></i>
               {% set title = title or h.get_facet_title(name) %}
               {{ title }}
@@ -66,11 +77,11 @@ within_tertiary
             </h2>
           {% endblock %}
           {% block facet_list_items %}
-            <div id="facet_{{ facet_id }}" class="collapse" ng-class="{ in: {{ facet_id }}.active }" ng-controller="MainCtrl" ng-init="init( {{otto}})">
+            <div id="facet_{{ facet_id }}" class="collapse" ng-class="{ in: {{ facet_id }}.active }" ng-controller="MainCtrl" ng-init="init( {{my_items}})">
 
-              {% if otto %}
+              {% if my_items %}
                 <nav>
-                  {% if  ottocount > 10 %}
+                  {% if  my_items_count > 10 %}
                   <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
                   {% endif %}
                   {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
@@ -82,8 +93,8 @@ within_tertiary
                   </ul>
                 </nav>
               <p class="module-footer">
-              <a href="" class="read-more" ng-hide="limit <= facetMinLimit || facetMinLimit >= {{ottocount}}"  ng-click="limit = limit - 10">Less</a>
-              <a href="" class="read-more pull-right" ng-hide="limit >= facetMaxLimit || limit >= {{ottocount}} || facetMinLimit >= {{ottocount}}"  ng-click="limit = limit + 10">More</a>
+              <a href="" class="read-more" ng-hide="limit <= facetMinLimit || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit - 10">Less</a>
+              <a href="" class="read-more pull-right" ng-hide="limit >= facetMaxLimit || limit >= {{my_items_count}} || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit + 10">More</a>
               </p>
 
           {% else %}

@@ -21,21 +21,34 @@ Example:
   <div>
     {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
   </div>
-
-  {% if package.total_resources %}
   <div>
-    <h3 href="#resources-{{ package.name }}" class="btn pull-right" data-toggle="collapse">Resources <span class="badge badge-important">{{ package.resources|length }} </span> / <span class="badge badge-info"> {{ package.total_resources}}</span></h3>
+    <h3 href="#resources-{{ package.name }}" class="btn pull-right" data-toggle="collapse">Resources <span class="badge">{{ package.resources|length }}</span></h3>
   </div>
-  {% else %}
-  <div>
-    <h3 href="#resources-{{ package.name }}" class="btn pull-right" data-toggle="collapse">Resources <span class="badge badge-info">{{ package.resources|length }}</span></h3>
-  </div>
-  {% endif %}
   </div>
 {% endblock %}
 
 
 {% block resources %}
+
+{{c.search_url_params}}
+
+{% set search_values = [] %}
+
+{% if "res_" in c.search_url_params %}
+    {% set params = c.search_url_params.split('&') %}
+{% endif %}
+
+{% if not params %}
+    {% set search_values = c.search_url_params.split('=') %}
+{% else %}
+    {% for x, i in params|count %}
+        {% set search_values[i] = params[i].split('=') %}
+    {% endfor %}
+
+{% endif %}
+
+{{params}}
+
   {% if package.resources and not hide_resources %}
     {% block resources_outer %}
       <div id="resources-{{ package.name }}" class="collapse">
@@ -51,13 +64,26 @@ Example:
         {% block resources_inner %}
         <tbody>
           {% for resource in package.resources %}
-          <tr>
-            <td>
-              <a href="{{ h.url_for(controller='package', action='resource_read', id=package.id, resource_id=resource.id) }}" class="list-group-item">{{ resource.name }}</a>
-            </td>
-            <td>{{ resource.format }}</td>
-            <td>{{ h.render_datetime(resource.created, "%Y-%m-%d") }}</td>
-          </tr>
+          {{params}}
+          {{search_values}}
+          otto
+          <br><b>>
+          {{resource}}
+          {% if params %}
+
+              {% for p in params %}
+              {% endfor %}
+
+
+                <tr>
+                  <td>
+                    <a href="{{ h.url_for(controller='package', action='resource_read', id=package.id, resource_id=resource.id) }}" class="list-group-item">{{ resource.name }}</a>
+                  </td>
+                  <td>{{ resource.format }}</td>
+                  <td>{{ h.render_datetime(resource.created, "%Y-%m-%d") }}</td>
+                </tr>
+
+            {% endif %}
           {% endfor %}
         </tbody>
         {% endblock %}

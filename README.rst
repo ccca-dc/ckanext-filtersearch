@@ -85,12 +85,24 @@ To install ckanext-filtersearch:
 Config Settings
 ---------------
 
-Document any optional config settings here. For example::
+in development/production.ini:
+ckanext.filtersearch.topic_field = iso_tpCat
+ckan.extra_resource_fields = par_experiment par_model par_frequency par_variables par_ensemble
 
-    # The minimum number of hours to wait before re-checking a resource
-    # (optional, default: 24).
-    ckanext.filtersearch.some_setting = some_default_value
+(The resource_fields named above need to be present in the json schema file from schemding/mdedit)
 
+schema.xml:
+Further more add the following line to schema.xml (best befor dynamic_field entries):
+<!-- Change 15-5: -->
+  <field name="res_extras_par_experiment" type="string" indexed="true" stored="true" multiValued="true"/>
+  <field name="res_extras_par_model" type="string" indexed="true" stored="true" multiValued="true"/>
+  <field name="res_extras_par_frequency" type="string" indexed="true" stored="true" multiValued="true"/>
+  <field name="res_extras_par_variables" type="string" indexed="true" stored="true" multiValued="true"/>
+  <field name="res_extras_par_ensemble" type="string" indexed="true" stored="true" multiValued="true"/>
+<!-- Change 15-5 end -->
+
+solr/jetty restart
+paster search index rebuild
 
 ------------------------
 Development Installation

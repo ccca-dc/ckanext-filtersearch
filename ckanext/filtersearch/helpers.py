@@ -72,10 +72,16 @@ def filtersearch_get_items(facet,extras):
               x['label_truncated'] = h.truncate(x['label'], 22)
               x['count'] = ('(%d)' % x['count'])
               x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
-              x['title'] = "September/Oktober/November" if x['label'] == "son" else x['label']
-              x['title'] = "Maerz/April/Mai" if x['label'] == "mam" else x['label']
-              x['title'] = "Juni/Juliy/August" if x['label'] == "jja" else x['label']
-              x['title'] = "Dezember/Januar/Februar" if x['label'] == "djf" else x['label']
+              if x['label'] == "son":
+                  x['title'] = "September/Oktober/November"
+              elif x['label'] == "mam":
+                  x['title'] = "Maerz/April/Mai"
+              elif x['label'] == "jja":
+                  x['title'] = "Juni/Juliy/August"
+              elif x['label'] == "djf":
+                  x['title'] = "Dezember/Januar/Februar"
+              else:
+                  x['title'] = x['label']
 
      else:
          for x in items:

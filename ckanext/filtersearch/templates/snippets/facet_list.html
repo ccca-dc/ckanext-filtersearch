@@ -88,7 +88,7 @@ within_tertiary
 
                   <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
                     <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:limit"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
-                       <a ng-href="{ang x.href ang}" title="{ang x.label ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
+                       <a ng-href="{ang x.href ang}" title="{ang x.title ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
                     </li>
                   </ul>
                 </nav>

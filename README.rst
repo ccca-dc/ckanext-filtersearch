@@ -41,17 +41,10 @@ ckanext-filtersearch
 Requirements
 ------------
 
-DEFINE: in development.ini/production.ini
 
- ckanext.filtersearch.topic_field = xxxx
+depends on spatial extension as spatial_query called here
 
- depends on spatial extension as spatial_query called here
-
- aöso checks whether spatial extend and time extend have been selected (datesearch)
-
-
-
-
+checks whether spatial extend and time extend have been selected (datesearch)
 
 
 ------------
@@ -85,14 +78,16 @@ To install ckanext-filtersearch:
 Config Settings
 ---------------
 
-in development/production.ini:
-ckanext.filtersearch.topic_field = iso_tpCat
-ckan.extra_resource_fields = par_experiment par_model par_frequency par_variables par_ensemble
+DEFINE: in development.ini/production.ini
 
-(The resource_fields named above need to be present in the json schema file from schemding/mdedit)
+ ckanext.filtersearch.topic_field = xxxx
+ ckan.extra_resource_fields = par_experiment par_model par_frequency par_variables par_ensemble
+
+ (The resource_fields named above need to be present in the json schema file from schemding/mdedit)
 
 schema.xml:
 Further more add the following line to schema.xml (best befor dynamic_field entries):
+
 <!-- Change 15-5: -->
   <field name="res_extras_par_experiment" type="string" indexed="true" stored="true" multiValued="true"/>
   <field name="res_extras_par_model" type="string" indexed="true" stored="true" multiValued="true"/>
@@ -101,7 +96,7 @@ Further more add the following line to schema.xml (best befor dynamic_field entr
   <field name="res_extras_par_ensemble" type="string" indexed="true" stored="true" multiValued="true"/>
 <!-- Change 15-5 end -->
 
-solr/jetty restart
+solr/jetty8 restart
 paster search index rebuild
 
 ------------------------

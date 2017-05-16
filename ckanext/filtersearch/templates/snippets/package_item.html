@@ -26,9 +26,12 @@ Example:
   <div>
     <h3 href="#resources-{{ package.name }}" class="btn pull-right" data-toggle="collapse">Resources <span class="badge badge-important">{{ package.resources|length }} </span> / <span class="badge badge-info"> {{ package.total_resources}}</span></h3>
   </div>
-  {% else %}
+  {% elif package.resources|length > 0 %}
   <div>
     <h3 href="#resources-{{ package.name }}" class="btn pull-right" data-toggle="collapse">Resources <span class="badge badge-info">{{ package.resources|length }}</span></h3>
+  </div>
+  {% else %}
+  <div>
   </div>
   {% endif %}
   </div>

@@ -55,33 +55,33 @@
   {% block search_facets %}
 
     {% if facets %}
-      <p class="filter-list">
+        <p class="filter-list">
         {% for field in facets.fields %}
           {% set search_facets_items = facets.search.get(field)['items'] %}
           <span class="facet">{{ facets.titles.get(field) }}:</span>
           {% for value in facets.fields[field] %}
               {% if h.filtersearch_check_resource_field(field)  %}
-            <span class="filtered pill resource_facet_hint">
-              {% if field ==  h.filtersearch_get_topic_field() %}
-                 {{h.filtersearch_get_topic(field,value)}}
-              {%- elif facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
-                {{ facets.translated_fields[(field,value)] }}
-              {%- else -%}
-                {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
-              {%- endif %}
-              <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
-            </span>
+                  <span class="filtered pill resource_facet_hint">
+                    {% if field ==  h.filtersearch_get_topic_field() %}
+                       {{h.filtersearch_get_topic(field,value)}}
+                    {%- elif facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
+                      {{ facets.translated_fields[(field,value)] }}
+                    {%- else -%}
+                      {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
+                    {%- endif %}
+                    <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
+                  </span>
             {% else %}
-            <span class="filtered pill">
-              {% if field ==  h.filtersearch_get_topic_field() %}
-                 {{h.filtersearch_get_topic(field,value)}}
-              {%- elif facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
-                {{ facets.translated_fields[(field,value)] }}
-              {%- else -%}
-                {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
-              {%- endif %}
-              <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
-            </span>
+                <span class="filtered pill">
+                  {% if field ==  h.filtersearch_get_topic_field() %}
+                     {{h.filtersearch_get_topic(field,value)}}
+                  {%- elif facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
+                    {{ facets.translated_fields[(field,value)] }}
+                  {%- else -%}
+                    {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
+                  {%- endif %}
+                  <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
+                </span>
             {% endif %}
           {% endfor %}
         {% endfor %}

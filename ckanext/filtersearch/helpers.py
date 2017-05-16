@@ -75,9 +75,9 @@ def filtersearch_get_items(facet,extras):
               if x['label'] == "son":
                   x['title'] = "September/Oktober/November"
               elif x['label'] == "mam":
-                  x['title'] = "Maerz/April/Mai"
+                  x['title'] = "M\xc3\xa4rz/April/Mai"
               elif x['label'] == "jja":
-                  x['title'] = "Juni/Juliy/August"
+                  x['title'] = "Juni/Juli/August"
               elif x['label'] == "djf":
                   x['title'] = "Dezember/Januar/Februar"
               else:

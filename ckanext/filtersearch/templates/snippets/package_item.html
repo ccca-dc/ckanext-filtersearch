@@ -51,9 +51,10 @@ Example:
         {% block resources_inner %}
         <tbody>
           {% for resource in package.resources %}
+              {%- set res_title = resource.name if resource.name else resource.url -%}
           <tr>
             <td>
-              <a href="{{ h.url_for(controller='package', action='resource_read', id=package.id, resource_id=resource.id) }}" class="list-group-item">{{ resource.name }}</a>
+               <a href="{{ h.url_for(controller='package', action='resource_read', id=package.id, resource_id=resource.id) }}" class="list-group-item">{{ res_title }}</a>
             </td>
             <td>{{ resource.format }}</td>
             <td>{{ h.render_datetime(resource.created, "%Y-%m-%d") }}</td>

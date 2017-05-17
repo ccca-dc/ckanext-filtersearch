@@ -32,6 +32,25 @@ import json
 from ckan.common import (
     _, ungettext, g, c, request, session, json, OrderedDict
 )
+
+def filtersearch_get_search_facets_from_fields(m_facets,fields):
+    #print fields
+    #print m_facets
+    s_f = {f[0]:[f[1]] for f in fields}
+    for f in fields:
+        print f[0]
+        print f[1]
+
+    #print s_f
+    m_facets['fields'] = s_f
+    #print m_facets
+    #for value in m_facets[fields]:
+        #print value
+
+    #result = json.dumps(m_facets)
+
+    return m_facets
+
 def filtersearch_check_resource_field(field):
     ' fields see plugin.py after_search'
     search_items = ["res_format", "res_extras_par_frequency", "res_extras_par_model", "res_extras_par_experiment","res_extras_par_variables","res_extras_par_ensemble"]

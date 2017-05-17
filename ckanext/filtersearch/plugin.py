@@ -9,6 +9,7 @@ import ckan.plugins.toolkit as toolkit
 from ckanext.filtersearch import helpers
 import pprint
 import re
+import json
 
 
 def get_topic_field():
@@ -29,6 +30,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.ITemplateHelpers)
     #plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
+    #plugins.implements(plugins.IOrganizationController, inherit=True)
+    #plugins.implements(plugins.IGroupController, inherit=True)
 
 
 
@@ -47,7 +50,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             'filtersearch_get_topic_field': helpers.filtersearch_get_topic_field,
             'filtersearch_get_bbox': helpers.filtersearch_get_bbox,
             'filtersearch_get_date_value': helpers.filtersearch_get_date_value,
-            'filtersearch_check_resource_field': helpers.filtersearch_check_resource_field
+            'filtersearch_check_resource_field': helpers.filtersearch_check_resource_field,
+            'filtersearch_get_search_facets_from_fields': helpers.filtersearch_get_search_facets_from_fields
         }
 
     def topic_field (self):

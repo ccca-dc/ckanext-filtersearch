@@ -37,9 +37,9 @@ def filtersearch_get_search_facets_from_fields(m_facets,fields):
     #print fields
     #print m_facets
     s_f = {f[0]:[f[1]] for f in fields}
-    for f in fields:
-        print f[0]
-        print f[1]
+    #for f in fields:
+    #    print f[0]
+    #    print f[1]
 
     #print s_f
     m_facets['fields'] = s_f

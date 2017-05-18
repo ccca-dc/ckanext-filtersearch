@@ -6,6 +6,21 @@
 {% set no_bottom_border = no_bottom_border if no_bottom_border else false %}
 {% set form_id = form_id if form_id else false %}
 
+{#} Anja 17.5.2017
+Patch 17.5 to display Badges at the top as well for orgs and groups:
+- remove resource colour because filter ist not possible by after_search
+- check whether org or groups
+- if org correct the remove path
+{#}
+{%- if c.group.is_organization == True -%}
+   {%-  set my_caller_dataset = False -%}
+{%- elif c.group.is_organization == False -%}
+    {%-  set my_caller_dataset = False -%}
+{%- else -%}
+      {%-  set my_caller_dataset = True -%}
+{% endif %}
+
+
 <form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
 
   {% block search_input %}
@@ -55,12 +70,22 @@
   {% block search_facets %}
 
     {% if facets %}
+        {#} Anja 17.5.2017
+          Check whether the search fields are set. This is not the case if we come from
+          the organization or group controller
+          {{c.fields|string}}
+        {#}
+          {%- if facets.fields|length == 0 -%}
+              {#}{{c.search_facets}}{#}
+              {%- set facets = h.filtersearch_get_search_facets_from_fields(facets, c.fields) -%}{#} really, here they hide, Anja 17.5.2017 {#}
+          {%- endif -%}
+
         <p class="filter-list">
         {% for field in facets.fields %}
           {% set search_facets_items = facets.search.get(field)['items'] %}
           <span class="facet">{{ facets.titles.get(field) }}:</span>
           {% for value in facets.fields[field] %}
-              {% if h.filtersearch_check_resource_field(field)  %}
+              {% if h.filtersearch_check_resource_field(field) and my_caller_dataset %}
                   <span class="filtered pill resource_facet_hint">
                     {% if field ==  h.filtersearch_get_topic_field() %}
                        {{h.filtersearch_get_topic(field,value)}}
@@ -69,7 +94,12 @@
                     {%- else -%}
                       {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
                     {%- endif %}
+
+                    {%- if c.group.is_organization == True -%}
+                    <a href="{{ facets.remove_field(field, value)|replace("group","organization") }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
+                    {%- else -%}
                     <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
+                    {%- endif -%}
                   </span>
             {% else %}
                 <span class="filtered pill">
@@ -80,7 +110,12 @@
                   {%- else -%}
                     {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
                   {%- endif %}
-                  <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
+                  {%- if c.group.is_organization == True -%}
+                      <a href="{{ facets.remove_field(field, value)|replace("group","organization") }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
+                  {%- else -%}
+                      <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
+                  {%- endif -%}
+
                 </span>
             {% endif %}
           {% endfor %}

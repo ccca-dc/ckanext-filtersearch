@@ -11,7 +11,11 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
 - remove resource colour because filter ist not possible by after_search
 - check whether org or groups
 - if org correct the remove path
+
+{{c.fields|string}}
+{{facets.fields|string}}
 {#}
+
 {%- if c.group.is_organization == True -%}
    {%-  set my_caller_dataset = False -%}
 {%- elif c.group.is_organization == False -%}
@@ -79,6 +83,7 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
               {#}{{c.search_facets}}{#}
               {%- set facets = h.filtersearch_get_search_facets_from_fields(facets, c.fields) -%}{#} really, here they hide, Anja 17.5.2017 {#}
           {%- endif -%}
+
 
         <p class="filter-list">
         {% for field in facets.fields %}

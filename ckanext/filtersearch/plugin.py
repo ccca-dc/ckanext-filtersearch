@@ -138,6 +138,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                               continue
                          else:
                              new_resource_list.append(resource)
+                     else:
+                         new_resource_list.append(resource)
                  pkg['resources'] = new_resource_list
 
             return search_results

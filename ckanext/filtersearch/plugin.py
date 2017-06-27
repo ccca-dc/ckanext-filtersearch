@@ -109,6 +109,9 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         #print("Results -------------------------------------")
         #pprint.pprint(search_results)
         # Extract resource facet params from fq
+        #print "after_search"
+        #print search_results
+        #print search_results['results']
 
         search_items = ["res_format", "res_extras_par_frequency", "res_extras_par_model", "res_extras_par_experiment","res_extras_par_variables","res_extras_par_ensemble"]
         package_text = ["format", "par_frequency", "par_model", "par_experiment","par_variables","par_ensemble" ]
@@ -121,10 +124,30 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         #print (fq)
 
         if (fq[0].find('res_format') == -1) and (fq[0].find('par_') == -1):
+            # Check versions and modify resource_list accordingly
+            new_resource_list = []
+            for pkg in search_results['results']:
+                 resource_list = pkg['resources']
+                 new_resource_list = []
+                 #print resource_list
+                 for resource in resource_list:
+                     # Consider resource versions for Kathi; 27.6.17
+                     #print resource
+                     if 'newer_version' in resource:
+                         #print "newer_version"
+                         if resource['newer_version'] != '':
+                              continue
+                         else:
+                             new_resource_list.append(resource)
+                     pkg['resources'] = new_resource_list
+
             return search_results
+
+
         len_s = len(search_items)
         #print "otto"
         i = -1
+        
         for item in search_items:
             i += 1
             if fq[0].find(search_items[i]) == -1:
@@ -144,11 +167,20 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         try:
               # Filter resources from package_search result :
               # logical or within one facet logical and across all facets
+              #print search_results['results']
               for pkg in search_results['results']:
                   pkg['total_resources'] = len(pkg['resources'])
                   resource_list = pkg['resources']
                   new_resource_list = []
+                  #print resource_list
                   for resource in resource_list:
+                      # Consider resource versions for Kathi; 27.6.17
+                      #print resource
+                      if 'newer_version' in resource:
+                          #print "newer_version"
+                          if resource['newer_version'] != '':
+                               pkg['total_resources'] -= 1
+                               continue
                       num_matches = [False for x in range(num_search_items)]
                       for i in range(num_search_items):
                           #print search_values[i][0]

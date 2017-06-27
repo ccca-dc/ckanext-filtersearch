@@ -125,11 +125,10 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
         if (fq[0].find('res_format') == -1) and (fq[0].find('par_') == -1):
             # Check versions and modify resource_list accordingly
-            new_resource_list = []
             for pkg in search_results['results']:
                  resource_list = pkg['resources']
-                 new_resource_list = []
                  #print resource_list
+                 new_resource_list = []
                  for resource in resource_list:
                      # Consider resource versions for Kathi; 27.6.17
                      #print resource
@@ -139,7 +138,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                               continue
                          else:
                              new_resource_list.append(resource)
-                     pkg['resources'] = new_resource_list
+                 pkg['resources'] = new_resource_list
 
             return search_results
 
@@ -147,7 +146,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         len_s = len(search_items)
         #print "otto"
         i = -1
-        
+
         for item in search_items:
             i += 1
             if fq[0].find(search_items[i]) == -1:

@@ -84,7 +84,6 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
               {%- set facets = h.filtersearch_get_search_facets_from_fields(facets, c.fields) -%}{#} really, here they hide, Anja 17.5.2017 {#}
           {%- endif -%}
 
-
         <p class="filter-list">
         {% for field in facets.fields %}
           {% set search_facets_items = facets.search.get(field)['items'] %}

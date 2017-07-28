@@ -4,9 +4,13 @@
 
 <h1 class="module-heading"><i class="icon-large icon-search"></i>Filter and Search</h1>
 <div class="module-content"><p>Find below various options to set filters and search for datasets and/or resources.</p></div>
+{#} Spatial search {#}
 {% snippet "spatial/snippets/spatial_query.html" %}
 
-	{{ super() }}
+{{ super() }}
+
+
+
 {% endblock %}
 
 {% block package_search_results_list %}

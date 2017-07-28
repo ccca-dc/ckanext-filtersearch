@@ -38,12 +38,13 @@ within_tertiary
 
 #}
 
-
 {% set facet_id = title|lower %}
-{% set my_items =  h.filtersearch_get_items(name, extras) %}
+{% do extras.update({'id': c.pkg.name}) %}
+{% set my_items =  h.filtersearch_get_resource_items(name, extras) %}
 {% if my_items %}
   {% set my_items_count =  my_items.count('count') %}
 {% endif %}
+
 
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}
@@ -54,29 +55,7 @@ within_tertiary
         {% set nav_item_class = ' ' %}
         {% set wrapper_class = 'nav-facet nav-facet-tertiary' %}
       {% endif %}
-
       {% block facet_list_item %}
-          {#} First Dataset Filter Item {#}
-          {#} There might be better solutions, but would involve various plugins ..., Anja 28.7{#}
-          {% if name == "extras_iso_tpCat" %}
-            {% set dataset_filters = ['extras_iso_tpCat', 'tags', 'author', 'organization', 'groups', 'license_id'] %}
-          <section class="module module-narrow module-shallow">
-          	<h2 class="module-heading">
-          		<i> {{ _('Dataset Filters:') }}</i>
-          		<a href="{{ h.remove_url_param(dataset_filters,  extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
-          	</h2>
-          {% endif %}
-
-      {% if name == "res_format" %} {#} First Resource Filter Item {#}
-        {% set resource_filters = ['res_format', 'res_extras_par_model', 'res_extras_par_experiment', 'res_extras_par_frequency', 'res_extras_par_variables', 'res_extras_par_ensemble'] %}
-        <section>
-            <h3 class="module-heading" >
-            {% set title = "Resource Filters:" %}
-            <a href="{{ h.remove_url_param(resource_filters, extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
-            <i>{{ title }}</i>
-          </h3>
-        </section>
-        {% endif %}
 
         <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
           {% block facet_list_heading %}

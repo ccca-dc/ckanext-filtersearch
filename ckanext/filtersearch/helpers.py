@@ -47,8 +47,8 @@ def filtersearch_get_search_facets_from_fields(m_facets,fields):
         if f[1] not in s_f[f[0]]:
             s_f[f[0]].append(f[1])
 
-    #print s_f
-    m_facets['fields'] = s_f
+    if m_facets:
+        m_facets['fields'] = s_f
     #print m_facets
     #for value in m_facets[fields]:
         #print value

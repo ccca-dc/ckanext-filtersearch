@@ -20,7 +20,8 @@ Example:
 
   <div>
   <div>
-  {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name))}}
+  {#}  {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name))}}{#}
+    {{ h.link_to(h.truncate(title, truncate_title), h.add_url_param(controller='package', action='read', extras={'id':package.name}))}}
   </div>
 
   {% if package.total_resources %}

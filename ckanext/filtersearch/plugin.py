@@ -7,6 +7,7 @@ except ImportError:
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckanext.filtersearch import helpers
+from ckanext.resourceversions import helpers as hres
 import pprint
 import re
 import json
@@ -117,15 +118,15 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
     # IPackageController
     def after_search(self, search_results, search_params):
+
+        # Extract resource facet params from fq
+        #print "********* after_search*******************"
+        #print search_results
+        #print search_results['results']
         #print("Params  -------------------------------------")
         #pprint.pprint(search_params)
         #print("Results -------------------------------------")
         #pprint.pprint(search_results)
-        # Extract resource facet params from fq
-        #print "after_search"
-        #print search_results
-        #print search_results['results']
-
 
         search_items = ["res_format", "res_extras_par_frequency", "res_extras_par_model", "res_extras_par_experiment","res_extras_par_variables","res_extras_par_ensemble"]
         package_text = ["format", "par_frequency", "par_model", "par_experiment","par_variables","par_ensemble" ]
@@ -139,6 +140,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         #print fq
         #print search_params
 
+        # Anja. 2.8.17: When searching within group or organization unfortunately the 'fq'
+        #               does not contain the search parameter ...
         if (fq[0].find('res_format') == -1) and (fq[0].find('par_') == -1):
             # Check versions and modify resource_list accordingly
             for pkg in search_results['results']:
@@ -163,6 +166,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
         len_s = len(search_items)
         #print "otto"
+        #print fq[0]
+
         i = -1
 
         for item in search_items:
@@ -180,12 +185,14 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                 search_values[i][j] = tmp_str
                 #print tmp_str
 
+        #print search_items
         #print search_values
         try:
               # Filter resources from package_search result :
-              # logical or within one facet logical and across all facets
+              # logical 'or' within one facet, logical 'and' across all facets
               #print search_results['results']
               for pkg in search_results['results']:
+                  #print "***************INSIDE***************"
                   pkg['total_resources'] = len(pkg['resources'])
                   resource_list = pkg['resources']
                   new_resource_list = []
@@ -225,6 +232,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                           new_resource_list.append(resource)
 
                   pkg['resources'] = new_resource_list
+                  # Anja, added 1.8.17; total_resources left unchanged
+                  pkg['num_resources'] = len(new_resource_list)
 
 
         except Exception as e:

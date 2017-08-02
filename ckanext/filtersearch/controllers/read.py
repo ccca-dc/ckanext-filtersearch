@@ -13,6 +13,7 @@ from pylons import config
 import ckan.lib.datapreview as datapreview
 import ckan.lib.plugins
 import ckan.plugins as plugins
+import pprint
 
 from ckan.common import OrderedDict, c, g, request, _
 
@@ -108,10 +109,15 @@ class ReadController(base.BaseController):
         template = self._read_template(package_type)
 
         ######################### MODIFICATION, Anja 27.7.17 ############################
-        ### Check if we need to display facets
+        ### Check if we need to display resource facets
         num_resources =  len(c.pkg_dict['resources'])
         conf_resources = config.get(
             'ckanext.filtersearch.facet_resources', False)
+        #print "******************** Read before search ********************************"
+        #print c.facets
+        #print c.search_facets
+
+        c.filtered_dict = None
 
         if conf_resources and  num_resources > int(conf_resources):
 
@@ -171,14 +177,26 @@ class ReadController(base.BaseController):
                        #'sort': sort_by,
                        'extras': search_extras
                    }
+
                 c.facet_titles = facets
-                #print search_dict
                 query = get_action('package_search')(context, search_dict)
-                #print query
                 c.facets = query['facets']
                 c.search_facets = query['search_facets']
-                #print c.facets
-                #print c.search_facets
+
+                ###### If we have ONE pkg Dict as result in query this is already the filtered resource Dict
+                # Thus modify the current package dict to only show the selected resources
+
+                #pprint.pprint(query['results'][0])
+                #print c.pkg
+                if query['count'] == 1:
+                    c.filtered_dict = query['results'][0]
+                    # set tracking info .. copied from CKAN - let to an error if not present
+                    for res in c.filtered_dict['resources']:
+                        tracking_summary = model.TrackingSummary.get_for_resource(res['url'])
+                        res['tracking_summary'] = tracking_summary
+                else:
+                    c.filtered_dict = None # Sure?????
+
         ######################### MODIFICATION, Anja 27.7.17  END ############################
 
 
@@ -187,8 +205,12 @@ class ReadController(base.BaseController):
                                        package_type=package_type)
 
         template = self._read_template(package_type)
+        #print "************************ TMPLATE"
+        #print template
         #print "**********************End read filtersearch"
 
+        #pprint.pprint(c.pkg_dict)
+        #pprint.pprint(context)
         try:
             return render(template,
                           extra_vars={'dataset_type': package_type})

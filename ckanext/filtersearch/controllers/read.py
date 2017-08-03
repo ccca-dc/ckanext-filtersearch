@@ -155,20 +155,20 @@ class ReadController(base.BaseController):
                 search_extras['name'] = id
                 #Dies ist wichtig:
                 fq = ' name:"%s"' % (id)
-                for (param, value) in request.params.items():
-                    if param not in ['q', 'page', 'sort'] \
-                            and len(value) and not param.startswith('_'):
-                        if not param.startswith('ext_'):
-                            c.fields.append((param, value))
-                            fq += ' %s:"%s"' % (param, value)
-                            if param not in c.fields_grouped:
-                                c.fields_grouped[param] = [value]
-                            else:
-                                c.fields_grouped[param].append(value)
-                        else:
-                            search_extras[param] = value
 
-                #print fq
+                #print type(request.params.items())
+                #print request.params.items()
+                #print request.params
+
+                for (param, value) in request.params.items():
+                    #Facet Query only for resource fields
+                    if param not in ['q', 'page', 'sort'] \
+                            and len(value) and param.startswith('res_'):
+                        c.fields.append((param, value))
+                        fq += ' %s:"%s"' % (param, value)
+                        if param not in c.fields_grouped:
+                            c.fields_grouped[param] = [value]
+
                 search_dict = {
                        'fq': fq.strip(),
                        'facet.field': facets.keys(),

@@ -160,6 +160,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                      else:
                          new_resource_list.append(resource)
                  pkg['resources'] = new_resource_list
+                 pkg['num_resources'] = len(new_resource_list)
 
             return search_results
 
@@ -243,3 +244,5 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         #print search_results['facets']
         #return {'results': search_results}
         return search_results
+
+    

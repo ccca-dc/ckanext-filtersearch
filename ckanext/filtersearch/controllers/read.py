@@ -92,6 +92,9 @@ class ReadController(base.BaseController):
         c.current_package_id = c.pkg.id
         c.related_count = c.pkg.related_count
 
+        # Anja
+        num_resources = len(c.pkg_dict['resources'])
+
         # can the resources be previewed?
         for resource in c.pkg_dict['resources']:
             # Backwards compatibility with preview interface
@@ -101,6 +104,12 @@ class ReadController(base.BaseController):
             resource_views = get_action('resource_view_list')(
                 context, {'id': resource['id']})
             resource['has_views'] = len(resource_views) > 0
+            # Anja: MODIFICATION for Kathis resourceversions
+            if resource.get('newer_version', '') == '':
+                num_resources -= 1
+
+        # Anja
+        c.pkg_dict['num_resources'] = num_resources
 
         package_type = c.pkg_dict['type'] or 'dataset'
         self._setup_template_variables(context, {'id': id},
@@ -110,7 +119,7 @@ class ReadController(base.BaseController):
 
         ######################### MODIFICATION, Anja 27.7.17 ############################
         ### Check if we need to display resource facets
-        num_resources =  len(c.pkg_dict['resources'])
+        #num_resources =  c.pkg.num_resources if c.pkg.num_resources else len(c.pkg_dict['resources'])
         conf_resources = config.get(
             'ckanext.filtersearch.facet_resources', False)
         #print "******************** Read before search ********************************"

@@ -105,7 +105,7 @@ class ReadController(base.BaseController):
                 context, {'id': resource['id']})
             resource['has_views'] = len(resource_views) > 0
             # Anja: MODIFICATION for Kathis resourceversions
-            if resource.get('newer_version', '') == '':
+            if resource.get('newer_version', '') != '':
                 num_resources -= 1
 
         # Anja

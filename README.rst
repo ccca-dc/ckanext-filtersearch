@@ -85,6 +85,12 @@ DEFINE: in development.ini/production.ini
 
  (The resource_fields named above need to be present in the json schema file from schemding/mdedit)
 
+ckanext.filtersearch.facet_resources = yyy
+
+ Configure the number of resources of one dataset from which on we like to show resource-facets for a
+ single package (for datasets with many resources like OEKS)
+
+
 schema.xml:
 Further more add the following line to schema.xml (best befor dynamic_field entries):
 

@@ -34,8 +34,10 @@ from ckan.common import (
 )
 
 def filtersearch_get_search_facets_from_fields(m_facets,fields):
+    #print "********+ Filter search helper"
     #print fields
     #print m_facets
+
     s_f = {f[0]:[f[1]] for f in fields}
 
     for f in fields:
@@ -45,13 +47,14 @@ def filtersearch_get_search_facets_from_fields(m_facets,fields):
         if f[1] not in s_f[f[0]]:
             s_f[f[0]].append(f[1])
 
-    #print s_f
-    m_facets['fields'] = s_f
+    if m_facets:
+        m_facets['fields'] = s_f
     #print m_facets
     #for value in m_facets[fields]:
         #print value
 
     #result = json.dumps(m_facets)
+    #print m_facets
 
     return m_facets
 
@@ -89,6 +92,42 @@ def filtersearch_get_items(facet,extras):
              x['title'] = x['label']
 
      elif facet == "res_extras_par_frequency":
+         for x in items:
+              x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
+              x['label'] =  x['display_name']
+              x['label_truncated'] = h.truncate(x['label'], 22)
+              x['count'] = ('(%d)' % x['count'])
+              x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
+              if x['label'] == "son":
+                  x['title'] = "September/Oktober/November"
+              elif x['label'] == "mam":
+                  x['title'] = "M\xc3\xa4rz/April/Mai"
+              elif x['label'] == "jja":
+                  x['title'] = "Juni/Juli/August"
+              elif x['label'] == "djf":
+                  x['title'] = "Dezember/Januar/Februar"
+              else:
+                  x['title'] = x['label']
+
+     else:
+         for x in items:
+             x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
+             x['label'] =  x['display_name']
+             x['label_truncated'] = h.truncate(x['label'], 22)
+             x['count'] = ('(%d)' % x['count'])
+             x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
+             x['title'] = x['label']
+
+
+    # remove unicode .... only by dumping to json ...
+     result = json.dumps(items)
+     return result
+
+def filtersearch_get_resource_items(facet,extras):
+    # for resources filters on a single package - OEKS15!!!!!!!!!!!! Anja, 27.7.17
+
+     items = h.get_facet_items_dict(facet,0) # 0 is important! means alqway get all ...
+     if facet == "res_extras_par_frequency":
          for x in items:
               x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
               x['label'] =  x['display_name']

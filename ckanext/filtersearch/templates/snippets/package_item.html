@@ -17,9 +17,11 @@ Example:
 
 
 {% block heading_title %}
+
   <div>
   <div>
-    {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
+  {#}  {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name))}}{#}
+    {{ h.link_to(h.truncate(title, truncate_title), h.add_url_param(controller='package', action='read', extras={'id':package.name}))}}
   </div>
 
   {% if package.total_resources %}
@@ -41,6 +43,7 @@ Example:
 {% block resources %}
   {% if package.resources and not hide_resources %}
     {% block resources_outer %}
+
       <div id="resources-{{ package.name }}" class="collapse">
       <hr />
       <table class="resource-table table table-hover">

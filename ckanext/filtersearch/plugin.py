@@ -7,9 +7,17 @@ except ImportError:
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckanext.filtersearch import helpers
+from ckanext.resourceversions import helpers as hres
 import pprint
 import re
 import json
+from ckan.common import OrderedDict, c, g, request, _
+from ckan import model
+import ckan.logic as logic
+
+from paste.deploy.converters import asbool
+import ast
+import collections
 
 
 def get_topic_field():
@@ -26,9 +34,9 @@ def get_topic_field():
 
 class FiltersearchPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
-    plugins.implements(plugins.IFacets)
     plugins.implements(plugins.ITemplateHelpers)
-    #plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IFacets)
     plugins.implements(plugins.IPackageController, inherit=True)
     #plugins.implements(plugins.IOrganizationController, inherit=True)
     #plugins.implements(plugins.IGroupController, inherit=True)
@@ -47,6 +55,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         return {
             'filtersearch_get_topic': helpers.filtersearch_get_topic,
             'filtersearch_get_items': helpers.filtersearch_get_items,
+            'filtersearch_get_resource_items': helpers.filtersearch_get_resource_items,
             'filtersearch_get_topic_field': helpers.filtersearch_get_topic_field,
             'filtersearch_get_bbox': helpers.filtersearch_get_bbox,
             'filtersearch_get_date_value': helpers.filtersearch_get_date_value,
@@ -56,6 +65,13 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
     def topic_field (self):
         return self._topic_field
+
+    # IRoutes
+    def before_map(self, map):
+        map.connect('dataset_read', '/dataset/{id}',
+                    controller ='ckanext.filtersearch.controllers.read:ReadController', action='read',
+                    ckan_icon='sitemap')
+        return map
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
@@ -81,7 +97,6 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         #facets_dict['extras_iso_exTempEnd'] = 'Temporal Extend End'
         #facets_dict['metadata_modified'] = 'Last modified'
 
-
         if self._topic_field:
             facets_dict[self._topic_field] = 'Categories'
 
@@ -99,19 +114,19 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict['res_extras_par_variables'] = 'Variables'
         facets_dict['res_extras_par_ensemble'] = 'Ensemble'
 
-
         return facets_dict
 
     # IPackageController
     def after_search(self, search_results, search_params):
+
+        # Extract resource facet params from fq
+        #print "********* after_search*******************"
+        #print search_results
+        #print search_results['results']
         #print("Params  -------------------------------------")
         #pprint.pprint(search_params)
         #print("Results -------------------------------------")
         #pprint.pprint(search_results)
-        # Extract resource facet params from fq
-        #print "after_search"
-        #print search_results
-        #print search_results['results']
 
         search_items = ["res_format", "res_extras_par_frequency", "res_extras_par_model", "res_extras_par_experiment","res_extras_par_variables","res_extras_par_ensemble"]
         package_text = ["format", "par_frequency", "par_model", "par_experiment","par_variables","par_ensemble" ]
@@ -121,8 +136,12 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
 
         fq = toolkit.get_or_bust(search_params, 'fq')
-        #print (fq)
+        #print "*******after_search"
+        #print fq
+        #print search_params
 
+        # Anja. 2.8.17: When searching within group or organization unfortunately the 'fq'
+        #               does not contain the search parameter ...
         if (fq[0].find('res_format') == -1) and (fq[0].find('par_') == -1):
             # Check versions and modify resource_list accordingly
             for pkg in search_results['results']:
@@ -147,6 +166,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
         len_s = len(search_items)
         #print "otto"
+        #print fq[0]
+
         i = -1
 
         for item in search_items:
@@ -164,12 +185,14 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                 search_values[i][j] = tmp_str
                 #print tmp_str
 
+        #print search_items
         #print search_values
         try:
               # Filter resources from package_search result :
-              # logical or within one facet logical and across all facets
+              # logical 'or' within one facet, logical 'and' across all facets
               #print search_results['results']
               for pkg in search_results['results']:
+                  #print "***************INSIDE***************"
                   pkg['total_resources'] = len(pkg['resources'])
                   resource_list = pkg['resources']
                   new_resource_list = []
@@ -209,9 +232,14 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                           new_resource_list.append(resource)
 
                   pkg['resources'] = new_resource_list
+                  # Anja, added 1.8.17; total_resources left unchanged
+                  pkg['num_resources'] = len(new_resource_list)
 
 
         except Exception as e:
             print("Exception: " + str(e))
 
+        #print search_results
+        #print search_results['facets']
+        #return {'results': search_results}
         return search_results

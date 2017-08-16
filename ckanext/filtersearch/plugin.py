@@ -68,6 +68,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
     # IRoutes
     def before_map(self, map):
+        map.connect('add dataset', '/dataset/new', controller='package', action='new')
         map.connect('dataset_read', '/dataset/{id}',
                     controller ='ckanext.filtersearch.controllers.read:ReadController', action='read',
                     ckan_icon='sitemap')
@@ -244,5 +245,3 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         #print search_results['facets']
         #return {'results': search_results}
         return search_results
-
-    

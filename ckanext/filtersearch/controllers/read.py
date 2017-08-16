@@ -80,6 +80,8 @@ class ReadController(base.BaseController):
                   'Too many "@" symbols')
 
         # check if package exists
+
+        #print "********************* anja read"
         try:
             c.pkg_dict = get_action('package_show')(context, data_dict)
             c.pkg = context['package']

@@ -208,6 +208,12 @@ class ReadController(base.BaseController):
                 else:
                     c.filtered_dict = None # Sure?????
 
+                # For Kathi and Version 2.7
+                context['filtered_dict'] = c.filtered_dict
+                context['facet_titles'] = c.facet_titles
+                context['search_facets'] = c.search_facets
+                context['facets'] = c.facets
+                context['fields'] = c.fields
         ######################### MODIFICATION, Anja 27.7.17  END ############################
 
 

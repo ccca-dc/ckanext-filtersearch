@@ -8,6 +8,20 @@ input.facet-filter {
     margin-right: 0;
 }
 
+
+.my_toggle_block:after {
+  content: " - Show Less"
+}
+.my_toggle_block.collapsed:after {
+  content: "- Show More"
+}
+
+
+/*
+.my_toggle_block:before {
+  content: " otto"
+}
+*/
 .collapsed .icon-chevron:before {
     content:          "\f078";
 }

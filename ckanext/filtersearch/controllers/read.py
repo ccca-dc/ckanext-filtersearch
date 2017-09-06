@@ -92,7 +92,7 @@ class ReadController(base.BaseController):
 
         # used by disqus plugin
         c.current_package_id = c.pkg.id
-        c.related_count = c.pkg.related_count
+        #c.related_count = c.pkg.related_count #Comment for Version 2.7 -> Kathi
 
         # Anja
         num_resources = len(c.pkg_dict['resources'])

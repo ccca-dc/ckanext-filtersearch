@@ -96,6 +96,7 @@ within_tertiary
                   {% if  my_items_count > 10 %}
                   <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
                   {% endif %}
+                  {#} Uncomment line below for a useful demonstration of angular {#}
                   {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
 
                   <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">

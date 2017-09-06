@@ -9,7 +9,7 @@ Example:
   {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources %}
 
 #}
-{#} Anja, 1.8.17 modifeied for facet filter on resources for a single package {#}
+{#} Anja, 1.8.17 modified for facet filter on resources for a single package {#}
 
   <section id="dataset-resources" class="resources">
     {% if c.facets.fields|length > 0 %} {#} Anja: ie facets selected {#}
@@ -19,20 +19,38 @@ Example:
     {% endif %}
 
     {% block resource_list %}
+      {% if c.facets.fields|length > 0 %} {#} Anja: ie facets selected {#}
+      {% set facests_selected = True %}
+      {% else %}
+      {% set facests_selected = False %}
+      {% endif %}
     {% if c.filtered_dict != None or resources != None %}
       <ul class="{% block resource_list_class %}resource-list{% endblock %}">
         {% block resource_list_inner %}
+        {% set count = 0 %}
 
-        {% if c.filtered_dict != None %} {#} Anja, 1.8.17 for facet filter on resources for a single package {#}
+        {% if c.filtered_dict != None  and c.facets.fields|length > 0 %} {#} Anja, 1.8.17 for facet filter on resources for a single package {#}
           {% for resource in c.filtered_dict.resources %}
               {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource %}
           {% endfor %}
         {% else %}
-          {% for resource in h.package_resources_list(pkg.id) %} {#} for Kathi - resourceversions {#}
-                  {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource %}
+          {#} Show only three resources {#}
+          {% set newest_ver_res = h.package_resources_list(pkg.id)%} {#} for Kathi - resourceversions {#}
+          {% for resource in newest_ver_res[0:3] %}
+              {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource %}
           {% endfor %}
-        {% endif %}
 
+          {% if newest_ver_res[3:]|length > 0 %}
+            <div id="all_resources" class="collapse">
+            {% for resource in newest_ver_res[3:] %}
+              {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource %}
+            {% endfor %}
+            </div>
+            <a  href="#all_resources"  class="btn btn-block collapsed my_toggle_block" data-toggle="collapse">
+              <i> Total number of resources: {{ newest_ver_res|length }} </i>
+            </a>
+          {% endif %}
+        {% endif %}
         {% endblock %}
       </ul>
     {% else %}

@@ -62,7 +62,7 @@ within_tertiary
             {% set dataset_filters = ['extras_iso_tpCat', 'tags', 'author', 'organization', 'groups', 'license_id'] %}
           <section class="module module-narrow module-shallow">
           	<h2 class="module-heading">
-          		<i> {{ _('Dataset Filters:') }}</i>
+          		<i> {{ _('Datapackage Filters:') }}</i>
           		<a href="{{ h.remove_url_param(dataset_filters,  extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
           	</h2>
           {% endif %}
@@ -70,6 +70,7 @@ within_tertiary
       {% if name == "res_format" %} {#} First Resource Filter Item {#}
         {% set resource_filters = ['res_format', 'res_extras_par_model', 'res_extras_par_experiment', 'res_extras_par_frequency', 'res_extras_par_variables', 'res_extras_par_ensemble'] %}
         <section>
+            <br><br>
             <h3 class="module-heading" >
             {% set title = "Resource Filters:" %}
             <a href="{{ h.remove_url_param(resource_filters, extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
@@ -80,8 +81,11 @@ within_tertiary
 
         <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
           {% block facet_list_heading %}
-
+              {% if name.startswith('res_') and my_items_count > 0 %}
+              <h2 class="module-heading accordion-toggle my_toggle_note" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">
+              {% else %}
               <h2 class="module-heading accordion-toggle" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">
+              {% endif %}
               <i class="icon-medium icon-filter"></i>
               {% set title = title or h.get_facet_title(name) %}
               {{ title }}
@@ -96,6 +100,7 @@ within_tertiary
                   {% if  my_items_count > 10 %}
                   <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
                   {% endif %}
+                  {#} Uncomment line below for a useful demonstration of angular {#}
                   {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
 
                   <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">

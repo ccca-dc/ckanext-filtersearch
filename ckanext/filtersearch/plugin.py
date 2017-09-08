@@ -122,7 +122,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
         # Extract resource facet params from fq
         #print "********* after_search*******************"
-        #print search_results
+        #print type(search_results['search_facets'])
         #print search_results['results']
         #print("Params  -------------------------------------")
         #pprint.pprint(search_params)
@@ -131,9 +131,9 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
         search_items = ["res_format", "res_extras_par_frequency", "res_extras_par_model", "res_extras_par_experiment","res_extras_par_variables","res_extras_par_ensemble"]
         package_text = ["format", "par_frequency", "par_model", "par_experiment","par_variables","par_ensemble" ]
-        max_values_per_item = 40
+        max_values_per_item = 50
         num_search_items = len (search_items)
-        search_values = [[None for x in range(len(search_items))] for y in range(max_values_per_item)]
+        search_values = [[None for x in range(num_search_items)] for y in range(max_values_per_item)]
 
 
         fq = toolkit.get_or_bust(search_params, 'fq')
@@ -143,6 +143,9 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
         # Anja. 2.8.17: When searching within group or organization unfortunately the 'fq'
         #               does not contain the search parameter ...
+
+
+
         if (fq[0].find('res_format') == -1) and (fq[0].find('par_') == -1):
             # Check versions and modify resource_list accordingly
             for pkg in search_results['results']:
@@ -160,6 +163,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                              new_resource_list.append(resource)
                      else:
                          new_resource_list.append(resource)
+
                  pkg['resources'] = new_resource_list
                  pkg['num_resources'] = len(new_resource_list)
 
@@ -167,11 +171,10 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
 
         len_s = len(search_items)
-        #print "otto"
         #print fq[0]
 
         i = -1
-
+        # find the actual items to search, if any
         for item in search_items:
             i += 1
             if fq[0].find(search_items[i]) == -1:
@@ -187,12 +190,11 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                 search_values[i][j] = tmp_str
                 #print tmp_str
 
-        #print search_items
-        #print search_values
         try:
               # Filter resources from package_search result :
               # logical 'or' within one facet, logical 'and' across all facets
               #print search_results['results']
+
               for pkg in search_results['results']:
                   #print "***************INSIDE***************"
                   pkg['total_resources'] = len(pkg['resources'])
@@ -201,15 +203,15 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                   #print resource_list
                   for resource in resource_list:
                       # Consider resource versions for Kathi; 27.6.17
-                      #print resource
                       if 'newer_version' in resource:
                           #print "newer_version"
                           if resource['newer_version'] != '':
                                pkg['total_resources'] -= 1
                                continue
-                      num_matches = [False for x in range(num_search_items)]
+                      num_matches = [False for x in range(num_search_items)]                      
+
                       for i in range(num_search_items):
-                          #print search_values[i][0]
+
                           if search_values[i][0] == None:
                               #print "None Found: " + str(i)
                               num_matches[i] = True     # ie. parameter was not specified
@@ -224,8 +226,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                               if resource.get(package_text[i]) == search_values[i][j]:
                                  num_matches[i] = True
 
+
                       append_resource = True
-                      #print num_matches
                       for i in range (num_search_items):
                           if num_matches[i] == False:
                              append_resource = False
@@ -240,6 +242,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
         except Exception as e:
             print("Exception: " + str(e))
+
 
         #print search_results
         #print search_results['facets']

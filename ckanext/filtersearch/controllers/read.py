@@ -92,7 +92,7 @@ class ReadController(base.BaseController):
 
         # used by disqus plugin
         c.current_package_id = c.pkg.id
-        c.related_count = c.pkg.related_count
+        #c.related_count = c.pkg.related_count #Comment for Version 2.7 -> Kathi
 
         # Anja
         num_resources = len(c.pkg_dict['resources'])
@@ -208,6 +208,12 @@ class ReadController(base.BaseController):
                 else:
                     c.filtered_dict = None # Sure?????
 
+                # For Kathi and Version 2.7 - did not work
+                #context['filtered_dict'] = c.filtered_dict
+                #context['facet_titles'] = c.facet_titles
+                #context['search_facets'] = c.search_facets
+                #context['facets'] = c.facets
+                #context['fields'] = c.fields
         ######################### MODIFICATION, Anja 27.7.17  END ############################
 
 

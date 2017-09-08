@@ -8,6 +8,30 @@ input.facet-filter {
     margin-right: 0;
 }
 
+
+.my_toggle_note:after {
+  content: "(number in brackets: datapackages)";
+  font-weight: normal;
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.3;
+}
+.my_toggle_note.collapsed:after {
+  content: " "
+}
+.my_toggle_block:after {
+  content: " - Show Less"
+}
+.my_toggle_block.collapsed:after {
+  content: "- Show More"
+}
+
+
+/*
+.my_toggle_block:before {
+  content: " otto"
+}
+*/
 .collapsed .icon-chevron:before {
     content:          "\f078";
 }

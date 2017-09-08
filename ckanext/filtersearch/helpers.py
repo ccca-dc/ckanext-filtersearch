@@ -99,8 +99,7 @@ def filtersearch_get_items(facet,extras):
               x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
               x['label'] =  x['display_name']
               x['label_truncated'] = ckan_truncate(x['label'], 22)
-              x['count'] = ('(in %d dp)' % x['count'])
-              #x['count'] = ('')
+              x['count'] = ('(%d)' % x['count'])
               x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
               if x['label'] == "son":
                   x['title'] = "September/Oktober/November"
@@ -112,16 +111,6 @@ def filtersearch_get_items(facet,extras):
                   x['title'] = "Dezember/Januar/Februar"
               else:
                   x['title'] = x['label']
-
-     elif facet.startswith('res_'):
-          for x in items:
-              x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
-              x['label'] =  x['display_name']
-              x['label_truncated'] = ckan_truncate(x['label'], 22)
-              x['count'] = ('(in %d dp)' % x['count'])
-              #x['count'] = ('')
-              x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
-              x['title'] = x['label']
      else:
          for x in items:
              x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
@@ -139,14 +128,14 @@ def filtersearch_get_items(facet,extras):
 def filtersearch_get_resource_items(facet,extras):
     # for resources filters on a single package - OEKS15!!!!!!!!!!!! Anja, 27.7.17
 
-     items = h.get_facet_items_dict(facet,0) # 0 is important! means alqway get all ...
+     items = h.get_facet_items_dict(facet,0) # 0 is important! means always get all ...
      if facet == "res_extras_par_frequency":
          for x in items:
               x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
               x['label'] =  x['display_name']
               x['label_truncated'] = ckan_truncate(x['label'], 22)
               #x['count'] = ('(%d)' % x['count'])
-              x['count'] = ('')
+              x['count'] = ('') # just one package
               x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
               if x['label'] == "son":
                   x['title'] = "September/Oktober/November"
@@ -165,7 +154,7 @@ def filtersearch_get_resource_items(facet,extras):
              x['label'] =  x['display_name']
              x['label_truncated'] = ckan_truncate(x['label'], 22)
              #x['count'] = ('(%d)' % x['count'])
-             x['count'] = ('')
+             x['count'] = ('') # just one package 
              x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
              x['title'] = x['label']
 

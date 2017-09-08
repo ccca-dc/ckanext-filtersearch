@@ -8,7 +8,6 @@ input.facet-filter {
     margin-right: 0;
 }
 
-
 .my_toggle_note:after {
   content: "(number in brackets: datapackages)";
   font-weight: normal;
@@ -23,7 +22,7 @@ input.facet-filter {
   content: " - Show Less"
 }
 .my_toggle_block.collapsed:after {
-  content: "- Show More"
+  content: " - Show More"
 }
 
 

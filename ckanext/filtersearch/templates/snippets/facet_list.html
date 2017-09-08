@@ -60,17 +60,19 @@ within_tertiary
           {#} There might be better solutions, but would involve various plugins ..., Anja 28.7{#}
           {% if name == "extras_iso_tpCat" %}
             {% set dataset_filters = ['extras_iso_tpCat', 'tags', 'author', 'organization', 'groups', 'license_id'] %}
-          <section class="module module-narrow module-shallow">
-          	<h2 class="module-heading">
-          		<i> {{ _('Datapackage Filters:') }}</i>
+{#}class="module-narrow module-shallow"{#}
+          <section class="module-narrow module-shallow" >
+          	<h5 class="module-heading">
+             <i> {{ _('Datapackage Filters:') }}</i>
           		<a href="{{ h.remove_url_param(dataset_filters,  extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
-          	</h2>
+            </h5>
           {% endif %}
+        </section>
 
       {% if name == "res_format" %} {#} First Resource Filter Item {#}
         {% set resource_filters = ['res_format', 'res_extras_par_model', 'res_extras_par_experiment', 'res_extras_par_frequency', 'res_extras_par_variables', 'res_extras_par_ensemble'] %}
         <section>
-            <br><br>
+            <br>
             <h3 class="module-heading" >
             {% set title = "Resource Filters:" %}
             <a href="{{ h.remove_url_param(resource_filters, extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>

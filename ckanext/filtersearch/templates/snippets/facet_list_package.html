@@ -45,6 +45,7 @@ within_tertiary
   {% set my_items_count =  my_items.count('count') %}
 {% endif %}
 
+{% if my_items_count %}
 
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}
@@ -99,5 +100,5 @@ within_tertiary
     {% endif %}
   {% endwith %}
 {% endblock %}
-
+{% endif %}
 {% resource 'filtersearch/angular' %}

@@ -127,7 +127,7 @@ def filtersearch_get_items(facet,extras):
 
 def filtersearch_get_resource_items(facet,extras):
     # for resources filters on a single package - OEKS15!!!!!!!!!!!! Anja, 27.7.17
-
+     print "************* Anja"
      items = h.get_facet_items_dict(facet,0) # 0 is important! means always get all ...
      if facet == "res_extras_par_frequency":
          for x in items:
@@ -154,7 +154,7 @@ def filtersearch_get_resource_items(facet,extras):
              x['label'] =  x['display_name']
              x['label_truncated'] = ckan_truncate(x['label'], 22)
              #x['count'] = ('(%d)' % x['count'])
-             x['count'] = ('') # just one package 
+             x['count'] = ('') # just one package
              x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
              x['title'] = x['label']
 

@@ -208,7 +208,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
                           if resource['newer_version'] != '':
                                pkg['total_resources'] -= 1
                                continue
-                      num_matches = [False for x in range(num_search_items)]                      
+                      num_matches = [False for x in range(num_search_items)]
 
                       for i in range(num_search_items):
 

@@ -1,0 +1,57 @@
+{#
+Displays a sidebard module with information for given package
+
+pkg    - The package dict that owns the resources.
+
+Example:
+
+  {% snippet "package/snippets/info.html", pkg=pkg %}
+
+#}
+{% block package_info %}
+  {% if pkg %}
+    <section class="module module-narrow">
+      <div class="module context-info">
+        <div class="module-content">
+          {% block package_info_inner %}
+          {#}
+            {% block heading %}
+              <h1 class="heading">{{ pkg.title or pkg.name }}</h1>
+            {% endblock %}
+            {#}
+            {% block nums %}
+              <div class="nums">
+                  <dl>
+                  <dt>{{ _('Followers') }}</dt>
+                  <dd>{{ h.SI_number_span(h.follow_count('dataset', pkg.id)) }}</dd>
+                  </dl>
+
+                  {% if pkg.tracking_summary %}
+                  {#} New; Anja, 12.9, 2017; (rest from ckan){#}
+                  <dl style="align:right">
+                  <dt>{{ _('Total Views') }}</dt>
+                  <dd>{{ h.SI_number_span(pkg.tracking_summary.total) }}</dd>
+                  </dl>
+                 {% endif %}
+              <div>
+            {% endblock %}
+
+            {% block follow_button %}
+              {% if not hide_follow_button %}
+
+                <div class="follow_button" data-toggle="tooltip" title="Follow/Unfollow updates on this datapackage" >
+                  {{ h.follow_button('dataset', pkg.name) }}
+                 </div>
+                 <br>
+                  <a href="https://plus.google.com/share?url={{ current_url }}" target="_blank" data-toggle="tooltip" title="Share on Google+" class="btn btn-info btn-xs"><i class="icon-google-plus-sign"></i> </a>
+                  <a href="https://twitter.com/share?url={{ current_url }}" target="_blank" data-toggle="tooltip" title="Share on Twitter" class="btn btn-info"><i class="icon-twitter-sign"></i> </a>
+                  <a href="https://www.facebook.com/sharer.php?u={{ current_url }}" target="_blank" data-toggle="tooltip" title="Share on Facebook" class="btn btn-info"><i class="icon-facebook-sign"></i> </a>
+
+              {% endif %}
+            {% endblock %}
+          {% endblock %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

@@ -60,7 +60,8 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             'filtersearch_get_bbox': helpers.filtersearch_get_bbox,
             'filtersearch_get_date_value': helpers.filtersearch_get_date_value,
             'filtersearch_check_resource_field': helpers.filtersearch_check_resource_field,
-            'filtersearch_get_search_facets_from_fields': helpers.filtersearch_get_search_facets_from_fields
+            'filtersearch_get_search_facets_from_fields': helpers.filtersearch_get_search_facets_from_fields,
+            'filtersearch_toggle_following': helpers.filtersearch_toggle_following
         }
 
     def topic_field (self):

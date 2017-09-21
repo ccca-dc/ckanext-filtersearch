@@ -45,7 +45,8 @@ within_tertiary
   {% set my_items_count =  my_items.count('count') %}
 {% endif %}
 
-{% if my_items_count %}
+{#} Anja, 14.9.2017: Show allways all {#}
+{#}{% if my_items_count %}{#}
 
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}
@@ -71,7 +72,7 @@ within_tertiary
           {% block facet_list_items %}
             <div id="facet_{{ facet_id }}" class="collapse" ng-class="{ in: {{ facet_id }}.active }" ng-controller="MainCtrl" ng-init="init( {{my_items}})">
 
-              {% if my_items %}
+            {% if my_items_count > 0 %}
                 <nav>
                   {% if  my_items_count > 10 %}
                   <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
@@ -90,9 +91,10 @@ within_tertiary
               <a href="" class="read-more pull-right" ng-hide="limit >= facetMaxLimit || limit >= {{my_items_count}} || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit + 10">More</a>
               </p>
 
-          {% else %}
-            <p class="module-content empty">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</p>
-          {% endif %}
+            {% else %}
+              {#} <p class="module-content empty">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</p>{#}
+               <p class="module-content empty">{{ _('Nothing specified') }}</p>
+            {% endif %}
         </div>
           {% endblock %}
         </section>
@@ -100,5 +102,5 @@ within_tertiary
     {% endif %}
   {% endwith %}
 {% endblock %}
-{% endif %}
+{#}{% endif %}{#}
 {% resource 'filtersearch/angular' %}

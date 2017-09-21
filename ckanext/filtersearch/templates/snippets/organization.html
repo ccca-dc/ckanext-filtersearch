@@ -39,9 +39,9 @@ Example:
       </h1>
       {% endblock %}
 
+      {% if not hide_description %}
+
       {% block description %}
-      
-      {#}
       {% if organization.description %}
         <p>
           {{ h.markdown_extract(organization.description, 180) }}
@@ -50,8 +50,8 @@ Example:
       {% else %}
         <p class="empty">{{ _('There is no description for this organization') }}</p>
       {% endif %}
-      {#}
       {% endblock %}
+      {% endif %}
 
       {% if show_nums %}
         {% block nums %}

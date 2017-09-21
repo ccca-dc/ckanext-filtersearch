@@ -1,27 +1,28 @@
 {% ckan_extends %}
 
-{% block secondary_content %}
+{#} Rename {#}
+{% block page_primary_action %}
+  {% if h.check_access('package_create') %}
+    <div class="page_primary_action">
+      {% link_for _('Add Datapackage'), controller='package', action='new', class_='btn btn-primary', icon='plus-sign-alt' %}
+    </div>
+  {% endif %}
+{% endblock %}
 
-<h1 class="module-heading"><i class="icon-large icon-search"></i>Filter and Search</h1>
-<div class="module-content"><p>Find below various options to set filters and search for datasets and/or resources.</p></div>
-{#} Spatial search {#}
+
+{% block secondary_content %}
+<h1 class="module-heading"><i class="icon-large icon-search"></i>Search and Filter</h1>
+<div class="module-content"><p>Search datapackages ...</p></div>
+
+{#} Search Bar  {#}
+{% block search %}
+      {% snippet 'home/snippets/side_search.html', form_id='dataset-search-form', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, count=c.page.item_count, facets=facets, show_empty=request.params, error=c.query_error, fields=c.fields %}
+{% endblock %}
+
+
 {% snippet "spatial/snippets/spatial_query.html" %}
 
 {{ super() }}
 
 
-
-{% endblock %}
-
-{% block package_search_results_list %}
-{{ super() }}
-{% endblock %}
-
-{% block primary_content %}
-{{ super() }}
-{% endblock %}
-
-
-{% block search_title %}
-{{ super() }}
 {% endblock %}

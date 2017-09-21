@@ -36,6 +36,49 @@ from ckan.common import (
     _, ungettext, g, c, request, session, json, OrderedDict
 )
 
+def filtersearch_snippet(template_name, **kw):
+    ''' Copied from CKAN
+    This function is used to load html snippets into pages. keywords
+    can be used to pass parameters into the snippet rendering '''
+    import ckan.lib.base as base
+    #print ("***************Anja ckan helper snippe")
+    #print(template_name)
+    #print (kw)
+    return base.render_snippet(template_name, **kw)
+
+def filtersearch_toggle_following(obj_type, obj_id):
+    ''' Modified from CKAN - Anja 20.9.17
+    Return a follow button for the given object type and id.
+
+    If the user is not logged in return an empty string instead.
+
+    :param obj_type: the type of the object to be followed when the follow
+        button is clicked, e.g. 'user' or 'dataset'
+    :type obj_type: string
+    :param obj_id: the id of the object to be followed when the follow button
+        is clicked
+    :type obj_id: string
+
+    :returns: a follow button as an HTML snippet
+    :rtype: string
+
+    '''
+    obj_type = obj_type.lower()
+    if obj_type != 'dataset':
+        return ''
+    # If the user is logged in show the follow/unfollow button
+    if c.user:
+        #print c
+        #context = {'model': model, 'session': model.Session, 'user': c.user}
+        context = {'user': c.user}
+        action = 'am_following_dataset'
+        following = logic.get_action(action)(context, {'id': obj_id})
+        return filtersearch_snippet('snippets/filtersearch_follow_button.html',
+                       following=following,
+                       obj_id=obj_id,
+                       obj_type=obj_type)
+    return ''
+
 def filtersearch_get_search_facets_from_fields(m_facets,fields):
     #print "********+ Filter search helper"
     #print fields
@@ -127,7 +170,7 @@ def filtersearch_get_items(facet,extras):
 
 def filtersearch_get_resource_items(facet,extras):
     # for resources filters on a single package - OEKS15!!!!!!!!!!!! Anja, 27.7.17
-     print "************* Anja"
+     #print "************* Anja"
      items = h.get_facet_items_dict(facet,0) # 0 is important! means always get all ...
      if facet == "res_extras_par_frequency":
          for x in items:

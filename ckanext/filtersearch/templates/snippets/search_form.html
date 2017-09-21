@@ -24,10 +24,13 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
       {%-  set my_caller_dataset = True -%}
 {% endif %}
 
+{% if c.controller != 'package' %}
 
 <form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
+  {% endif %}
 
   {% block search_input %}
+  {% if c.controller != 'package' %}
     <div class="search-input control-group {{ search_class }}">
       <input type="text" class="search" name="q" value="{{ query }}" autocomplete="on" placeholder="{{ placeholder }}">
       {% block search_input_button %}
@@ -35,8 +38,9 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
         <i class="icon-search"></i>
         <span>{{ _('Submit') }}</span>
       </button>
-      {% endblock %}
     </div>
+    {% endblock %}
+    {% endif %}
   {% endblock %}
 
   {% block search_search_fields %}
@@ -156,7 +160,10 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
 
   {% endblock %}
 
+{% if c.controller != 'package' %}
 </form>
+{% endif %}
+
 
 {% if show_empty and count == 0 %}
   {% trans %}

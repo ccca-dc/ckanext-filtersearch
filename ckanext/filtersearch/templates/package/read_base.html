@@ -67,12 +67,12 @@
   {% block side_search %}
         {% snippet 'home/snippets/side_search.html', form_id='dataset-search-form', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, count=c.page.item_count, facets=facets, show_empty=request.params, error=c.query_error, fields=c.fields %}
   {% endblock %}
-
+{#}
   {% set dataset_extent = h.get_pkg_dict_extra(c.pkg_dict, 'spatial', '') %}
   {% if dataset_extent %}
     {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=dataset_extent %}
   {% endif %}
-
+{#}
 
   {% block package_facets %}
     {% if facets %} {#} might be not enough resources to show facets; ckanext.filtersearch.facet_resources Paramter {#}

@@ -1,5 +1,11 @@
 {% ckan_extends %}
 
+
+
+{% set facets = c.facets %}
+{% set resource_filters = ['res_format', 'res_extras_par_model', 'res_extras_par_experiment', 'res_extras_par_frequency', 'res_extras_par_variables', 'res_extras_par_ensemble'] %}
+
+
 {% block primary_content_inner %}
 
   {#} Check whether the facet filters selected all resources of a package {#}
@@ -52,10 +58,6 @@
 {% endblock %}
 
 
-{% set facets = c.facets %}
-{% set resource_filters = ['res_format', 'res_extras_par_model', 'res_extras_par_experiment', 'res_extras_par_frequency', 'res_extras_par_variables', 'res_extras_par_ensemble'] %}
-
-
 {% block secondary_content %}
 
 
@@ -104,21 +106,15 @@
       {% endblock %}
 
       {% block package_info %}
-    {#}    {% snippet 'package/snippets/info.html', pkg=pkg %}{#}
       {% endblock %}
 
 
     {% block package_license %}
-    {#}  {% snippet "snippets/license.html", pkg_dict=pkg %}{#}
-    {% endblock %}
+      {% endblock %}
 
 
     {% block package_social %}
-    {#} moved to info; Anja; 12.9.17
-      {% snippet "snippets/social.html" %}
-      <br>
-      {#}
-    {% endblock %}
+      {% endblock %}
 
   {{ super() }}
 

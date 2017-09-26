@@ -24,23 +24,13 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
       {%-  set my_caller_dataset = True -%}
 {% endif %}
 
-{% if c.controller != 'package' %}
-<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
-{% endif %}
+{#} Ckeck for location and datsearch filters {#}
+{%- set q_string  =  c.search_url_params|string -%}
+{%- set startdate = h.filtersearch_get_date_value(q_string, 'ext_startdate')-%}
+{%- set enddate = h.filtersearch_get_date_value(q_string, 'ext_enddate')-%}
+{%- set bbox = h.filtersearch_get_bbox(q_string) -%}
 
-  {% block search_input %}
-  {% if c.controller != 'package' %}
-    <div class="search-input control-group {{ search_class }}">
-      <input type="text" class="search" name="q" value="{{ query }}" autocomplete="on" placeholder="{{ placeholder }}">
-      {% block search_input_button %}
-      <button type="submit" value="search">
-        <i class="icon-search"></i>
-        <span>{{ _('Submit') }}</span>
-      </button>
-    </div>
-    {% endblock %}
-    {% endif %}
-  {% endblock %}
+<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
 
   {% block search_search_fields %}
     {% if fields -%}
@@ -64,6 +54,8 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
         <button class="btn js-hide" type="submit">{{ _('Go') }}</button>
         {% endblock %}
       </div>
+
+
     {% endif %}
 
   {% endblock %}
@@ -74,8 +66,8 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
     {% endif %}
   {% endblock %}
 
-  {% block search_facets %}
 
+  {% block search_facets %}
     {% if facets %}
         {#} Anja 17.5.2017
           Check whether the search fields are set. This is not the case if we come from
@@ -127,11 +119,7 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
             {% endif %}
           {% endfor %}
         {% endfor %}
-        {#} Ckeck for location and datsearch filters {#}
-        {%- set q_string  =  c.search_url_params|string -%}
-        {%- set startdate = h.filtersearch_get_date_value(q_string, 'ext_startdate')-%}
-        {%- set enddate = h.filtersearch_get_date_value(q_string, 'ext_enddate')-%}
-        {%- set bbox = h.filtersearch_get_bbox(q_string) -%}
+
 
         {%- if startdate -%}
               <span class="filtered pill">
@@ -153,12 +141,10 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
 
         {%- endif %}
       </p>
-      <a class="show-filters btn">{{ _('Filter Results') }}</a>
+      <hr>
+      <a class="show-filters btn" style="margin-bottom:15px;margin-top:0px;">{{ _('Filter Results') }}</a>
     {% endif %}
-
-
   {% endblock %}
-
 {% if c.controller != 'package' %}
 </form>
 {% endif %}

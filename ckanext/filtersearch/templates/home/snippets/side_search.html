@@ -4,13 +4,10 @@
 {% set placeholder = _('e.g. climate change') %}
 {% set form_id = form_id if form_id else false %}
 
-
-<form {% if form_id %}id="{{ form_id }}" {% endif %} class="module-content search-form no-bottom-border" style="padding-bottom:0" method="get" data-module="select-switch" action="{% url_for controller='package', action='search' %}">
-    <div class="search-input control-group ">
-      <input type="text" class="search" name="q" value="{{ query }}" autocomplete="off" placeholder="{% block search_placeholder %}{{ placeholder }}{% endblock %}" />
-      <button type="submit">
-        <i class="icon-search"></i>
-        <span>{{ _('Search') }}</span>
-      </button>
-    </div>  
+{% if c.controller != 'package' %}
+<form  class="no-bottom-border" style="padding-bottom:0"  action="{% url_for controller='package', action='search' %}">
+{% endif %}
+    <div class="search-input control-group" style="margin-left:15px;">
+      <input type="text" style="width:180px;" class="search" name="q" value="{{ query }}" autocomplete="off" placeholder="{% block search_placeholder %}{{ placeholder }}{% endblock %}" />
+   </div>
 </form>

@@ -60,7 +60,6 @@
 
 {% block secondary_content %}
 
-
   <h1 class="module-heading"><i class="icon-large icon-search"></i>Search and Filter</h1>
   <div class="module-content"><p>Search datapackages ...</p></div>
 
@@ -86,12 +85,14 @@
           <a href="{{ h.remove_url_param(resource_filters, extras={'id': c.pkg.name})  }}" class="filtersearch_action">{{ _('Clear') }}</a>
           <i>{{ title }}</i>
         </h3>
+
       {% for facet in facets %}
         {% if facet != 'fields' %}
           {{ h.snippet('snippets/facet_list_package.html', title=c.facet_titles[facet], name=facet, extras={'id':c.pkg.name}) }}
         {% endif%}
       {% endfor %}
     </section>
+
     {% endif %}
   {% endblock %}
 

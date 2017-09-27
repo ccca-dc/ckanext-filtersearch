@@ -36,6 +36,7 @@ from ckan.common import (
     _, ungettext, g, c, request, session, json, OrderedDict
 )
 
+
 def filtersearch_snippet(template_name, **kw):
     ''' Copied from CKAN
     This function is used to load html snippets into pages. keywords
@@ -208,6 +209,8 @@ def filtersearch_get_resource_items(facet,extras):
 
 def filtersearch_get_topic(field, value):
     #print "#####################################"
+    #print field
+    #print value
     schema = hs.scheming_dataset_schemas(False)
     if not schema:
         return value

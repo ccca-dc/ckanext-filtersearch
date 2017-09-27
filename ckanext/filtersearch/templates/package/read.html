@@ -24,7 +24,7 @@
 
 {% block package_description %}
 
-<span  style="margin-left:0px; float:right" >
+<span  style="margin-left:0px; float:right;padding-left:15px;padding-button:15px;" >
   <div align="right">
       {% if h.check_access('package_update', {'id':pkg.id }) %}
         <span>
@@ -60,6 +60,16 @@
      {% set _class = _class or 'tag-list well' %}
        {% for group in pkg.groups %}
            <a class="fs_group_button"  href="{% url_for controller='group', action='read', id=group.id %}">{{ h.truncate(group.display_name, 15) }}</a>
+           <br>
+       {% endfor %}
+     {% endif %}
+     {% if pkg.iso_tpCat %}
+     <br>
+     {% set _class = _class or 'tag-list well' %}
+     {% set topic_field = h.filtersearch_get_topic_field () %}
+     {% set categories = pkg.iso_tpCat %}
+       {% for cat in categories %}
+           <a class="fs_cat_button"  href="{%-url_for controller='package',action='search'-%}?{{topic_field}}={{cat}} ">{{ h.truncate(h.filtersearch_get_topic(topic_field,cat), 30) }}</a>
            <br>
        {% endfor %}
      {% endif %}

@@ -69,7 +69,8 @@
      {% set topic_field = h.filtersearch_get_topic_field () %}
      {% set categories = pkg.iso_tpCat %}
        {% for cat in categories %}
-           <a class="fs_cat_button"  href="{%-url_for controller='package',action='search'-%}?{{topic_field}}={{cat}} ">{{ h.truncate(h.filtersearch_get_topic(topic_field,cat), 30) }}</a>
+            {% set cat_button = 'fs_cat_button fs_c_'  + cat %}
+           <a class="{{cat_button}}"  href="{%-url_for controller='package',action='search'-%}?{{topic_field}}={{cat}} ">{{ h.truncate(h.filtersearch_get_topic(topic_field,cat), 30) }}</a>
            <br>
        {% endfor %}
      {% endif %}

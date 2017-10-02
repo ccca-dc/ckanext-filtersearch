@@ -1,0 +1,15 @@
+{% set controller = obj_type %}
+{% if controller == 'dataset' %}
+  {% set controller = 'package' %}
+{% endif %}
+
+
+{% if following %}
+  <a href="{{ h.url_for(controller=controller, action='unfollow', id=obj_id) }}"   data-toggle="tooltip" title="Unfollow updates on this datapackage" >
+<i class="filtered pill icon-remove-sign red_back"></i>    {#}{{ _('Unfollow') }}{#}
+  </a>
+{% else %}
+  <a href="{{ h.url_for(controller=controller, action='follow', id=obj_id) }}" data-toggle="tooltip" title="Follow updates on this datapackage">
+<i class="filtered pill icon-plus-sign green_back"></i>    {#}{{ _('Follow') }}{#}
+  </a>
+{% endif %}

@@ -1,88 +1,124 @@
 {% ckan_extends %}
 
+
+
 {% set facets = c.facets %}
 {% set resource_filters = ['res_format', 'res_extras_par_model', 'res_extras_par_experiment', 'res_extras_par_frequency', 'res_extras_par_variables', 'res_extras_par_ensemble'] %}
-
-{% block secondary_content %}
-
-  {% set dataset_extent = h.get_pkg_dict_extra(c.pkg_dict, 'spatial', '') %}
-  {% if dataset_extent %}
-    {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=dataset_extent %}
-  {% endif %}
-
-  {{ super() }}
-    {% block package_facets %}
-
-  {% if facets %} {#} might be not enough resources to show facets; ckanext.filtersearch.facet_resources Paramter {#}
-    <section>
-        <h3 class="module-heading" >
-        {% set title = "Resource Filters:" %}
-        <a href="{{ h.remove_url_param(resource_filters, extras={'id': c.pkg.name})  }}" class="filtersearch_action">{{ _('Clear') }}</a>
-        <i>{{ title }}</i>
-      </h3>
-    {% for facet in facets %}
-      {% if facet != 'fields' %}
-        {{ h.snippet('snippets/facet_list_package.html', title=c.facet_titles[facet], name=facet, extras={'id':c.pkg.name}) }}
-      {% endif%}
-    {% endfor %}
-  </section>
-  {% endif %}
-  {% endblock %}
-
-{% endblock %}
-
 
 
 {% block primary_content_inner %}
 
-{#} Check wether the facet filters seelcted all resources of a package {#}
+  {#} Check whether the facet filters selected all resources of a package {#}
 
-
-{% block my_facet_badges %}
-
-{% if c.filtered_dict %}
-    {% if c.filtered_dict.num_resources < c.pkg_dict.num_resources %}
-        {% set filtered = true %}
+   {% block my_facet_badges %}
+    {% if c.filtered_dict %}
+        {% if c.filtered_dict.num_resources < c.pkg_dict.num_resources %}
+            {% set filtered = true %}
+        {% else %}
+            {% set filtered = false %}
+        {% endif %}
     {% else %}
         {% set filtered = false %}
     {% endif %}
-{% else %}
-    {% set filtered = false %}
-{% endif %}
 
-{#} Check wether resource filters (res_) are selected {#}
+    {#} Check wether resource filters (res_) are selected {#}
 
-{#} field might be initially 0 {#}
-  {%- if facets.fields|length == 0 -%}
-      {% if facets %}  {#} might be not enough resources to show facets; ckanext.filtersearch.facet_resources Paramter {#}
-        {%- set facets = h.filtersearch_get_search_facets_from_fields(facets, c.fields) -%}{#} really, here they hide, Anja 17.5.2017 {#}
-      {% endif %}
-  {%- endif -%}
-{%- if facets.fields|length != 0 and filtered -%} {#} This means filters selected {#}
-
-<span class="filtered pill resource_facet_hint">
-  <i>Resource Filters selected - not all resources of this dataset shown</i>   <a href="{{ h.remove_url_param(resource_filters, extras={'id': c.pkg.name})  }}" class="remove"><i class="remove icon-remove" title="{{ _('Remove all filters') }}"></i></a></span>
-
-<br>
-<br>
-  {%- endif -%}
-
-{% for field in facets.fields if field.startswith("res_")%}
-
-  <span class="facet">{{ c.facet_titles[field]}} :
-
-  {% for value in facets.fields[field] %}
+    {#} field might be initially 0 {#}
+      {%- if facets.fields|length == 0 -%}
+          {% if facets %}  {#} might be not enough resources to show facets; ckanext.filtersearch.facet_resources Paramter {#}
+            {%- set facets = h.filtersearch_get_search_facets_from_fields(facets, c.fields) -%}{#} really, here they hide, Anja 17.5.2017 {#}
+          {% endif %}
+      {%- endif -%}
+    {%- if facets.fields|length != 0 and filtered -%} {#} This means filters selected {#}
 
     <span class="filtered pill resource_facet_hint">
-        <a href="{{ h.remove_url_param(field, value, extras={'id': c.pkg.name}) }}" class="remove" title="{{ _('Remove') }}"> {{value}} <i class="icon-remove"></i></a>
-   </span>
-   {% endfor %}
+      <i>Resource Filters selected - not all resources of this datapackage shown</i>   <a href="{{ h.remove_url_param(resource_filters, extras={'id': c.pkg.name})  }}" class="remove"><i class="remove icon-remove" title="{{ _('Remove all filters') }}"></i></a></span>
 
- </span>
-{% endfor %}
+    <br>
+    <br>
+      {%- endif -%}
+
+    {% for field in facets.fields if field.startswith("res_")%}
+      <span class="facet">{{ c.facet_titles[field]}} :
+
+      {% for value in facets.fields[field] %}
+        <span class="filtered pill resource_facet_hint">
+            <a href="{{ h.remove_url_param(field, value, extras={'id': c.pkg.name}) }}" class="remove" title="{{ _('Remove') }}"> {{value}} <i class="icon-remove"></i></a>
+       </span>
+       {% endfor %}
+
+     </span>
+    {% endfor %}
+    {% endblock %}
+
+
+{{ super() }}
+
 
 {% endblock %}
 
 
-{{ super() }}
+{% block secondary_content %}
+
+  <h1 class="module-heading"><i class="icon-large icon-search"></i>Search and Filter</h1>
+  <div class="module-content"><p>Search datapackages ...</p></div>
+
+  {#} Search Bar {#}
+
+  {% block side_search %}
+        {% snippet 'home/snippets/side_search.html', form_id='dataset-search-form', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, count=c.page.item_count, facets=facets, show_empty=request.params, error=c.query_error, fields=c.fields %}
+  {% endblock %}
+
+{#} Anja, 25.9.17 - Why no more???
+  {% set dataset_extent = h.get_pkg_dict_extra(c.pkg_dict, 'spatial', '') %}
+  {% if dataset_extent %}
+    {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=dataset_extent %}
+  {% endif %}
+{#}
+
+  {% block package_facets %}
+    {% if facets %} {#} might be not enough resources to show facets; ckanext.filtersearch.facet_resources Paramter {#}
+      <section>
+        <br>
+          <h3 class="module-heading" >
+          {% set title = "Resource Filters:" %}
+          <a href="{{ h.remove_url_param(resource_filters, extras={'id': c.pkg.name})  }}" class="filtersearch_action">{{ _('Clear') }}</a>
+          <i>{{ title }}</i>
+        </h3>
+
+      {% for facet in facets %}
+        {% if facet != 'fields' %}
+          {{ h.snippet('snippets/facet_list_package.html', title=c.facet_titles[facet], name=facet, extras={'id':c.pkg.name}) }}
+        {% endif%}
+      {% endfor %}
+    </section>
+
+    {% endif %}
+  {% endblock %}
+
+  {% block secondary_help_content %}{% endblock %}
+
+      {% block package_organization %}
+      {#}
+        {% if pkg.organization %}
+          {% set org = h.get_organization(pkg.organization.name) %}
+          {% snippet "snippets/organization.html", organization=org, has_context_title=false, hide_description=false%}
+        {% endif %}
+        {#}
+      {% endblock %}
+
+      {% block package_info %}
+      {% endblock %}
+
+
+    {% block package_license %}
+      {% endblock %}
+
+
+    {% block package_social %}
+      {% endblock %}
+
+  {{ super() }}
+
+
 {% endblock %}

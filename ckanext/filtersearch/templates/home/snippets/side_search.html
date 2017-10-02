@@ -1,0 +1,13 @@
+{% import 'macros/form.html' as form %}
+
+{% set tags = h.get_facet_items_dict('tags', limit=3) %}
+{% set placeholder = _('e.g. climate change') %}
+{% set form_id = form_id if form_id else false %}
+
+{% if c.controller != 'package' %}
+<form  class="no-bottom-border" style="padding-bottom:0"  action="{% url_for controller='package', action='search' %}">
+{% endif %}
+    <div class="search-input control-group" style="margin-left:15px;">
+      <input type="text" style="width:180px;" class="search" name="q" value="{{ query }}" autocomplete="off" placeholder="{% block search_placeholder %}{{ placeholder }}{% endblock %}" />
+   </div>
+</form>

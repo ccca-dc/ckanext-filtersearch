@@ -1,5 +1,6 @@
 /* Buttons and Colors to display the categories */
-.fs_cat_button {
+.fs_cat_button, .fs_cat_button:visited,.fs_cat_button:active,.fs_cat_button:link{
+  text-decoration: none;
   display: inline-block;
   margin-bottom: 4px;
   color: #ffffff;
@@ -8,7 +9,6 @@
   padding: 1px 10px;
   align-content: center;
   text-align: center;
-  box-shadow: inset 0 1px 0 #ffffff;
 }
 .fs_c_001 {
   background-color: #216f52;
@@ -45,10 +45,10 @@ a.fs_cat_button:hover {
   text-decoration: none;
   color: #fff;
   background-color: #30778d;
-  box-shadow: inset 0 1px 0 #3d97b3;
 }
 
-.fs_group_button {
+.fs_group_button, .fs_group_button:visited, .fs_group_button:active, .fs_group_button:link  {
+  text-decoration: none;
   display: inline-block;
   margin-bottom: 4px;
   color: #111111;
@@ -57,14 +57,13 @@ a.fs_cat_button:hover {
   border: 1px solid #dddddd;
   align-content: center;
   text-align: center;
-  box-shadow: inset 0 1px 0 #ffffff;
+  outline:none;
 }
 a.fs_group_button:hover {
   text-decoration: none;
   color: #fff;
   background-color: #30778d;
   border: 1px solid #235767;
-  box-shadow: inset 0 1px 0 #3d97b3;
 }
 
 

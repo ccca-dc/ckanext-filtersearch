@@ -19,9 +19,12 @@ from paste.deploy.converters import asbool
 import ast
 import collections
 
+import  ckan.plugins.toolkit as tk
+context = tk.c
+
 
 def get_topic_field():
-    # Get the value of the ckan.iauthfunctions.users_can_create_groups
+    # Get the value of the ckanext.filtersearch.topic_field
     # setting from the CKAN config file as a string, or False if the setting
     # isn't in the config file.
     topic_field = config.get(
@@ -109,13 +112,32 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict['organization'] = 'Organizations'
         facets_dict['groups'] = 'Groups'
         facets_dict['license_id'] = 'Licenses'
-        facets_dict['frequency'] = 'Freuqency'
+        facets_dict['frequency'] = 'Frequency'
+
+        # Get specifc filed names
+
+        # Get count of datasets for topics
+        data_dict={'sort': None, 'fq': '', 'rows': 20, 'facet.field': [ 'extras_specifics' ], 'q': u'', 'start': 0, 'extras': {}}
+
+        query = tk.get_action('package_search')({}, data_dict)
+        print "**************************************************+++filter_facets"
+        #print query['search_facets']
+        #print query['results']
+        for x in query['results']:
+            print x['specifics']
+            for y in x['specifics']:
+                facet_name = 'extras_specifics_' + y['name']
+                print facet_name
+                facets_dict[facet_name] = y['name']
+
+        #facets = query['search_facets']
+        #topic_facets = facets[topic_field]
+        #topic_facets = topic_facets['items']
+
+        ###########################
+
+        #facets_dict['extras_specifics'] = 'Specifics'
         facets_dict['res_format'] = 'Formats'
-        facets_dict['res_extras_par_model'] = 'Model'
-        facets_dict['res_extras_par_experiment'] = 'Experiment'
-        facets_dict['res_extras_par_frequency'] = 'Frequency'
-        facets_dict['res_extras_par_variables'] = 'Variables'
-        facets_dict['res_extras_par_ensemble'] = 'Ensemble'
 
         return facets_dict
 
@@ -139,9 +161,9 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
 
         fq = toolkit.get_or_bust(search_params, 'fq')
-        #print "*******after_search"
-        #print fq
-        #print search_params
+        print "*******after_search"
+        print fq
+        print search_params
 
         # Anja. 2.8.17: When searching within group or organization unfortunately the 'fq'
         #               does not contain the search parameter ...

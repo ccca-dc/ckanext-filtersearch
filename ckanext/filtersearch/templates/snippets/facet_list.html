@@ -59,29 +59,17 @@ within_tertiary
           {#} First Dataset Filter Item {#}
           {#} There might be better solutions, but would involve various plugins ..., Anja 28.7{#}
           {% if name == "extras_topic_category" %}
-            {% set dataset_filters = ['extras_topic_category', 'tags', 'author', 'organization', 'groups', 'license_id'] %}
+            {% set dataset_filters = ['extras_topic_category', 'tags', 'author', 'organization', 'groups', 'license_id', 'frequency', 'res_format', 'extras_specifics'] %}
 {#}class="module-narrow module-shallow"{#}
           <section class="module-narrow module-shallow" >
           	<h5 class="module-heading">
-             <i> {{ _('Datapackage Filters:') }}</i>
+             <i> {{ _('Further Filters:') }}</i>
           		<a href="{{ h.remove_url_param(dataset_filters,  extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
             </h5>
           {% endif %}
         </section>
 
-      {% if name == "res_format" %} {#} First Resource Filter Item {#}
-        {% set resource_filters = ['res_format', 'res_extras_par_model', 'res_extras_par_experiment', 'res_extras_par_frequency', 'res_extras_par_variables', 'res_extras_par_ensemble'] %}
-        <section>
-            <br>
-            <h3 class="module-heading" >
-            {% set title = "Resource Filters:" %}
-            <a href="{{ h.remove_url_param(resource_filters, extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
-            <i>{{ title }}</i>
-          </h3>
-        </section>
-        {% endif %}
-
-        <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
+          <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
           {% block facet_list_heading %}
               {% if name.startswith('res_') and my_items_count > 0 %}
               <h2 class="module-heading accordion-toggle my_toggle_note" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">

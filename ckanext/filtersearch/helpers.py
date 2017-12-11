@@ -124,9 +124,13 @@ def filtersearch_get_topic_field():
 
 def filtersearch_get_items(facet,extras):
 
+     print "filtersearch**************"
+     print facet
+     print extras
+
      items = h.get_facet_items_dict(facet,0) # 0 is important! means alqway get all ...
      #if facet == "par_experiment":
-        # print  json.dumps(items)
+     print  json.dumps(items)
 
      if facet == filtersearch_get_topic_field():
          for x in items:

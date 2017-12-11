@@ -109,6 +109,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict['organization'] = 'Organizations'
         facets_dict['groups'] = 'Groups'
         facets_dict['license_id'] = 'Licenses'
+        facets_dict['frequency'] = 'Freuqency'
         facets_dict['res_format'] = 'Formats'
         facets_dict['res_extras_par_model'] = 'Model'
         facets_dict['res_extras_par_experiment'] = 'Experiment'

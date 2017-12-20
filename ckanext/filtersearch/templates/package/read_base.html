@@ -1,60 +1,8 @@
 {% ckan_extends %}
 
 
-
-{% set facets = c.facets %}
-{% set resource_filters = ['res_format', 'res_extras_par_model', 'res_extras_par_experiment', 'res_extras_par_frequency', 'res_extras_par_variables', 'res_extras_par_ensemble'] %}
-
-
 {% block primary_content_inner %}
-
-  {#} Check whether the facet filters selected all resources of a package {#}
-
-   {% block my_facet_badges %}
-    {% if c.filtered_dict %}
-        {% if c.filtered_dict.num_resources < c.pkg_dict.num_resources %}
-            {% set filtered = true %}
-        {% else %}
-            {% set filtered = false %}
-        {% endif %}
-    {% else %}
-        {% set filtered = false %}
-    {% endif %}
-
-    {#} Check wether resource filters (res_) are selected {#}
-
-    {#} field might be initially 0 {#}
-      {%- if facets.fields|length == 0 -%}
-          {% if facets %}  {#} might be not enough resources to show facets; ckanext.filtersearch.facet_resources Paramter {#}
-            {%- set facets = h.filtersearch_get_search_facets_from_fields(facets, c.fields) -%}{#} really, here they hide, Anja 17.5.2017 {#}
-          {% endif %}
-      {%- endif -%}
-    {%- if facets.fields|length != 0 and filtered -%} {#} This means filters selected {#}
-
-    <span class="filtered pill resource_facet_hint">
-      <i>Resource Filters selected - not all resources of this datapackage shown</i>   <a href="{{ h.remove_url_param(resource_filters, extras={'id': c.pkg.name})  }}" class="remove"><i class="remove icon-remove" title="{{ _('Remove all filters') }}"></i></a></span>
-
-    <br>
-    <br>
-      {%- endif -%}
-
-    {% for field in facets.fields if field.startswith("res_")%}
-      <span class="facet">{{ c.facet_titles[field]}} :
-
-      {% for value in facets.fields[field] %}
-        <span class="filtered pill resource_facet_hint">
-            <a href="{{ h.remove_url_param(field, value, extras={'id': c.pkg.name}) }}" class="remove" title="{{ _('Remove') }}"> {{value}} <i class="icon-remove"></i></a>
-       </span>
-       {% endfor %}
-
-     </span>
-    {% endfor %}
-    {% endblock %}
-
-
 {{ super() }}
-
-
 {% endblock %}
 
 
@@ -75,26 +23,6 @@
     {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=dataset_extent %}
   {% endif %}
 {#}
-
-  {% block package_facets %}
-    {% if facets %} {#} might be not enough resources to show facets; ckanext.filtersearch.facet_resources Paramter {#}
-      <section>
-        <br>
-          <h3 class="module-heading" >
-          {% set title = "Resource Filters:" %}
-          <a href="{{ h.remove_url_param(resource_filters, extras={'id': c.pkg.name})  }}" class="filtersearch_action">{{ _('Clear') }}</a>
-          <i>{{ title }}</i>
-        </h3>
-
-      {% for facet in facets %}
-        {% if facet != 'fields' %}
-          {{ h.snippet('snippets/facet_list_package.html', title=c.facet_titles[facet], name=facet, extras={'id':c.pkg.name}) }}
-        {% endif%}
-      {% endfor %}
-    </section>
-
-    {% endif %}
-  {% endblock %}
 
   {% block secondary_help_content %}{% endblock %}
 

@@ -36,6 +36,17 @@ from ckan.common import (
     _, ungettext, g, c, request, session, json, OrderedDict
 )
 
+def filtersearch_get_facet_matches():
+    num = config.get(
+        'ckanext.filtersearch.facet_matches', False)
+
+    return num
+
+def filtersearch_get_fixed_facets():
+    fixed_facets = config.get(
+        'ckanext.filtersearch.fixed_facets', False)
+
+    return fixed_facets
 
 def filtersearch_snippet(template_name, **kw):
     ''' Copied from CKAN
@@ -105,13 +116,6 @@ def filtersearch_get_search_facets_from_fields(m_facets,fields):
 
     return m_facets
 
-def filtersearch_check_resource_field(field):
-    ' fields see plugin.py after_search'
-    search_items = ["res_format", "res_extras_par_frequency", "res_extras_par_model", "res_extras_par_experiment","res_extras_par_variables","res_extras_par_ensemble"]
-    if field in search_items:
-        return True
-    else:
-        return False
 
 def filtersearch_get_topic_field():
     topic_field = config.get(
@@ -124,13 +128,13 @@ def filtersearch_get_topic_field():
 
 def filtersearch_get_items(facet,extras):
 
-     print "filtersearch**************"
-     print facet
-     print extras
+     #print "filtersearch**************"
+     #print facet
+     #print extras
 
      items = h.get_facet_items_dict(facet,0) # 0 is important! means alqway get all ...
      #if facet == "par_experiment":
-     print  json.dumps(items)
+     #print  json.dumps(items)
 
      if facet == filtersearch_get_topic_field():
          for x in items:

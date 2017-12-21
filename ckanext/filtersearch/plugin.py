@@ -66,11 +66,20 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             'filtersearch_toggle_following': helpers.filtersearch_toggle_following,
             'filtersearch_get_fixed_facets': helpers.filtersearch_get_fixed_facets,
             'filtersearch_get_facet_matches': helpers.filtersearch_get_facet_matches,
+            'filtersearch_check_id': helpers.filtersearch_check_id,
 
         }
 
     def topic_field (self):
         return self._topic_field
+
+    # IRoutes
+    def before_map(self, map):
+        map.connect('add dataset', '/dataset/new', controller='package', action='new')
+        map.connect('dataset_read', '/dataset/{id}',
+                    controller ='ckanext.filtersearch.controllers.read:ReadController', action='read',
+                    ckan_icon='sitemap')
+        return map
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):

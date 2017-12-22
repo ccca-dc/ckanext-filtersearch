@@ -9,7 +9,8 @@ Example:
   {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources %}
 
 #}
-<section id="dataset-resources" class="resources">
+{#} Attention: clear right important :-), Anja, 22.12.2017 {#}
+<section id="dataset-resources" class="resources" style="clear:right">
   <h3>{{ _('Resources') }}</h3>
   {% block resource_list %}
     {% if resources %}

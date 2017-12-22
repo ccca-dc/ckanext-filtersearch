@@ -61,8 +61,8 @@ class ReadController(base.BaseController):
                    'auth_user_obj': c.userobj}
         data_dict = {'id': id, 'include_tracking': True}
 
-        print "************ filtersearch read"
-        print id
+        #print "************ filtersearch read"
+        #print id
         # interpret @<revision_id> or @<date> suffix
         split = id.split('@')
         if len(split) == 2:
@@ -85,7 +85,7 @@ class ReadController(base.BaseController):
 
         corrected_id = h.filtersearch_check_id (id)
         data_dict['id'] = corrected_id
-        print corrected_id
+        #print corrected_id
         #######################End new ################
 
         # check if package exists

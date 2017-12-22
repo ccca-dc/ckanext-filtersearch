@@ -118,8 +118,9 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         print "**************************************************+++filter_facets"
 
         #data_dict={'sort': None, 'fq': '', 'rows': 1, 'facet.field': [ 'extras_specifics' ], 'q': u'', 'start': 0, 'extras': {}}
-        data_dict={'sort': None, 'fq': '', 'facet.field': [ 'extras_specifics' ],'q': u''}
-        data_dict={'sort': None, 'fq': '+dataset_type:dataset','q': u'extras_specifics:[\'\' TO *] OR extras_variables:[\'\' TO *]'}
+        #data_dict={'sort': None, 'fq': '', 'facet.field': [ 'extras_specifics' ],'q': u''}
+        data_dict={'sort': None, 'fq': '+dataset_type:dataset','q': u'extras_specifics:[\'\' TO *]'}
+        data_dict={'sort': None, 'fq': '+dataset_type:dataset','q': u'extras_specifics:*'}
 
         query = tk.get_action('package_search')({}, data_dict)
 

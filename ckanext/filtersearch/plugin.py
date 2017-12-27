@@ -22,7 +22,6 @@ import collections
 import  ckan.plugins.toolkit as tk
 context = tk.c
 
-
 def get_topic_field():
     # Get the value of the ckanext.filtersearch.topic_field
     # setting from the CKAN config file as a string, or False if the setting
@@ -65,21 +64,11 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             'filtersearch_get_search_facets_from_fields': helpers.filtersearch_get_search_facets_from_fields,
             'filtersearch_toggle_following': helpers.filtersearch_toggle_following,
             'filtersearch_get_fixed_facets': helpers.filtersearch_get_fixed_facets,
-            'filtersearch_get_facet_matches': helpers.filtersearch_get_facet_matches,
-            'filtersearch_check_id': helpers.filtersearch_check_id,
-
+            'filtersearch_get_facet_specific_count': helpers.filtersearch_get_facet_specific_count,
         }
 
     def topic_field (self):
         return self._topic_field
-
-    # IRoutes
-    def before_map(self, map):
-        map.connect('add dataset', '/dataset/new', controller='package', action='new')
-        map.connect('dataset_read', '/dataset/{id}',
-                    controller ='ckanext.filtersearch.controllers.read:ReadController', action='read',
-                    ckan_icon='sitemap')
-        return map
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
@@ -114,50 +103,38 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict['license_id'] = 'Licenses'
         facets_dict['frequency'] = 'Frequency'
 
-        # Get specifc field names
-        print "**************************************************+++filter_facets"
-
+        # Get specifc field names for facetting
         #data_dict={'sort': None, 'fq': '', 'rows': 1, 'facet.field': [ 'extras_specifics' ], 'q': u'', 'start': 0, 'extras': {}}
         #data_dict={'sort': None, 'fq': '', 'facet.field': [ 'extras_specifics' ],'q': u''}
-        data_dict={'sort': None, 'fq': '+dataset_type:dataset','q': u'extras_specifics:[\'\' TO *]'}
+        #data_dict={'sort': None, 'fq': '+dataset_type:dataset','q': u'extras_specifics:[\'\' TO *]'}
         data_dict={'sort': None, 'fq': '+dataset_type:dataset','q': u'extras_specifics:*'}
 
         query = tk.get_action('package_search')({}, data_dict)
 
-        #print "*************************************************"
-        #print json.dumps(query['results'],indent =3)
-        #print "*************************************************"
-
-        print json.dumps(query['search_facets'],indent = 3)
-        #print json.dumps(query['facets'],indent =3)
-
-        #print context
-        print query['count']
-        #print query['results']
-
         facet_list =[]
         for x in query['results']:
-            print x['specifics']
             for y in x['specifics']:
                 facet_name = 'extras_specifics_' + y['name']
-                #print facet_name
-                if facet_name not in facet_list:
-                    facets_dict[facet_name] = y['name']
-                    f ={}
+                if not any(facet_name in f['name'] for f in facet_list):
+                    #facets_dict[facet_name] = y['name'] # we do this below depending on count
+                    f = {}
                     f['name'] = facet_name
+                    f['value'] = y['name']
                     f['count'] = 1
                     facet_list.append(f)
                 else:
-                    [d['count'] == d['count'] + 1 for d in facet_list if d['name'] == facet_name]
+                    # count in order to check whether the the facet should be added - ini -parameter
+                    for f in facet_list:
+                        if f['name'] == facet_name:
+                            f['count'] = f['count'] + 1
 
-        print facet_list
 
+        #Add them if we have enough datastes with respective values
+        num = helpers.filtersearch_get_facet_specific_count();
 
-        #facets = query['search_facets']
-        #topic_facets = facets[topic_field]
-        #topic_facets = topic_facets['items']
-
-        ###########################
+        for x in facet_list:
+            if x['count'] > num:
+                facets_dict[x['name']] = x['value']
 
         facets_dict['res_format'] = 'Formats'
 

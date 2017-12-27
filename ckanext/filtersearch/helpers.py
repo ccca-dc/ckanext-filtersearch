@@ -37,33 +37,11 @@ from ckan.common import (
 )
 
 
-import re
-from ckanext.resourceversions import helpers as hr
-
-def filtersearch_check_id(id):
-    # Check id for id or name and version number
-
-    r1 = re.compile("-v..$")
-    if not r1.search(id):
-        #pkg = tk.get_action('package_show')({'id':id, 'ignore_auth': True})
-        #if pkg:
-        #    return id
-        #else:
-            #Look for newest version
-            ipkg = hr.get_newest_version(id + '-v01')
-            if ipkg:
-                return ipkg['name']
-            else:
-                return id
-    else:
-        return id
-
-
-def filtersearch_get_facet_matches():
+def filtersearch_get_facet_specific_count():
     num = config.get(
-        'ckanext.filtersearch.facet_matches', False)
+        'ckanext.filtersearch.facet_specific_count', False)
 
-    return num
+    return int(num)
 
 def filtersearch_get_fixed_facets():
     fixed_facets = config.get(

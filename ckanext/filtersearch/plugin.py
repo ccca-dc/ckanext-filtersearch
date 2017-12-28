@@ -116,7 +116,6 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             for y in x['specifics']:
                 facet_name = 'extras_specifics_' + y['name']
                 if not any(facet_name in f['name'] for f in facet_list):
-                    #facets_dict[facet_name] = y['name'] # we do this below depending on count
                     f = {}
                     f['name'] = facet_name
                     f['value'] = y['name']
@@ -133,9 +132,12 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         num = helpers.filtersearch_get_facet_specific_count();
 
         for x in facet_list:
-            if x['count'] > num:
+            if x['count'] >= num:
                 facets_dict[x['name']] = x['value']
 
+
+        # Add Variables:
+        facets_dict['extras_specifics_Variables'] = 'Variables'
         facets_dict['res_format'] = 'Formats'
 
         return facets_dict

@@ -147,7 +147,7 @@ def filtersearch_get_items(facet,extras):
              x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
              x['title'] = x['label']
 
-     elif facet == "res_extras_par_frequency":
+     elif facet == "frequency":
          for x in items:
               x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
               x['label'] =  x['display_name']

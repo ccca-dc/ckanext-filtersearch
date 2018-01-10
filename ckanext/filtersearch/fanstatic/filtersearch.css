@@ -108,7 +108,7 @@ input.facet-filter {
 }
 
 .my_toggle_note:after {
-  content: "(number in brackets: datapackages)";
+  content: "(number in brackets: datasets)";
   font-weight: normal;
   margin-top: 2px;
   font-size: 11px;

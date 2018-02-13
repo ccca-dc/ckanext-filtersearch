@@ -29,6 +29,28 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
 {% endif %}
 
   {% block search_input %}
+  <div class="form-group has-feedback">
+    <input type="search" class="form-control input-lg" name="q" value="{{ query }}" autocomplete="on" placeholder="{{ placeholder }}">
+    <i class="icon-search form-control-feedback" aria-hidden="true"></i>
+  </div>
+  <div class="reset-search">
+    {% if c.group_dict.name %}
+      <a href="{{ h.url_for(controller=c.controller, action=c.action, id=c.group_dict.name) }}"><i class="icon-remove-circle" aria-hidden="true"></i> {{ _('Reset search') }}</a>
+      {% if no_title=="small" %}
+        <div class="pull-right">
+          {% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}
+        </div>
+      {% endif %}
+    {% else %}
+      <a href="{{ h.url_for(controller=c.controller, action=c.action) }}"><i class="icon-remove-circle" aria-hidden="true"></i> {{ _('Reset search') }}</a>
+      {% if no_title=="small" %}
+        <div class="pull-right">
+          {% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+   {#
   {% if c.controller != 'package' %}
     <div class="search-input control-group {{ search_class }}">
       <input type="text" class="search" name="q" value="{{ query }}" autocomplete="on" placeholder="{{ placeholder }}">
@@ -40,6 +62,7 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
     </div>
     {% endblock %}
     {% endif %}
+    #}
   {% endblock %}
 
   {% block search_search_fields %}
@@ -49,9 +72,8 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
   {% endblock %}
 
   {% block search_sortby %}
-
-    {% if sorting %}
-      <div class="form-select control-group control-order-by">
+    {% if sorting != "False" %}
+      <div class="form-select control-group control-order-by pull-right">
         <label for="field-order-by">{{ _('Order by') }}</label>
         <select id="field-order-by" name="sort">
           {% for label, value in sorting %}

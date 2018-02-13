@@ -14,12 +14,6 @@
 
 
 {% block page_header %}
-{#} Anja: 20.9.17: Remove a small line: padding-top:0 {#}
-  <header class="module-content page-header" style="padding-top:0px;">
-{#} Anja: 20.9.17: Remove Nav;  {#}
-    {% block content_primary_nav %} {% endblock %}
-    {% block content_action %}  {% endblock %}
-  </header>
 {% endblock %}
 
 {% block package_description %}
@@ -28,7 +22,7 @@
   <div align="right">
       {% if h.check_access('package_update', {'id':pkg.id }) %}
         <span>
-        {% link_for _('Manage'), controller='package', action='edit', id=pkg.name, class_='btn', icon='wrench'%}
+        {% link_for _('Manage'), controller='package', action='edit', id=pkg.name, class_='btn btn-primary', icon='wrench'%}
         </span>
         <br> <br>
       {% endif %}

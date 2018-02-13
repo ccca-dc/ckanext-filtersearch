@@ -32,7 +32,7 @@
 {% endblock %}
 
 {% block secondary_content %}
-<section class="module module-narrow module-shallow">
+<section class="module module-narrow module-shallow input-group">
     <h2 class="module-heading" style="padding-top:15px;"><i class="icon-large icon-search"></i>
         Search and Filter
         <a href="{{ h.url_for(controller='package', action='search')}}"  class="action">{{ _('Clear all') }}</a>
@@ -44,10 +44,17 @@
 {% endblock %}
 </div>
 </section>
+<hr>
 
 {% snippet "spatial/snippets/spatial_query.html" %}
+<hr>
 
-{{ super() }}
-
-
+<div class="filters">
+  <div ng-app="filtersearchApp">
+    {% for facet in c.facet_titles %}
+      {{ h.snippet('snippets/facet_list.html', title=c.facet_titles[facet], name=facet) }}
+    {% endfor %}
+  </div>
+  <a class="close no-text hide-filters"><i class="icon-remove-sign"></i><span class="text">close</span></a>
+</div>
 {% endblock %}

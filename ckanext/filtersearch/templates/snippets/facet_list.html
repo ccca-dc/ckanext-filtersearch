@@ -1,4 +1,5 @@
 {% resource 'filtersearch/angular' %}
+{% resource 'filtersearch/filtersearch.css' %}
 
 {#
 Construct a facet module populated with links to filtered results.
@@ -73,14 +74,14 @@ within_tertiary
 
           {% if  my_items_count > 0 %} {#} Show only facets that have matches {#}
 
-            <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
+            <section class="{{ wrapper_class or 'facet-filter' }}">
             {% block facet_list_heading %}
-                <h2 class="module-heading accordion-toggle my_toggle_note" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">
+                <h3 class="module-heading accordion-toggle my_toggle_note" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">
                     <i class="icon-medium icon-filter"></i>
                     {% set title = title or h.get_facet_title(name) %}
                     {{ title }}
                     <i class="icon-medium icon-chevron pull-right"></i>
-                </h2>
+                </h3>
             {% endblock %}
 
             {% block facet_list_items %}

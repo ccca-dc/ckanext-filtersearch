@@ -75,6 +75,8 @@ within_tertiary
           {% if  my_items_count > 0 %} {#} Show only facets that have matches {#}
 
             <section class="{{ wrapper_class or 'facet-filter' }}">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
             {% block facet_list_heading %}
                 <h3 class="module-heading accordion-toggle my_toggle_note" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">
                     <i class="icon-medium icon-filter"></i>
@@ -82,10 +84,12 @@ within_tertiary
                     {{ title }}
                     <i class="icon-medium icon-chevron pull-right"></i>
                 </h3>
-            {% endblock %}
+                {% endblock %}
+                </div>
 
             {% block facet_list_items %}
               <div id="facet_{{ facet_id }}" class="collapse" ng-class="{ in: {{ facet_id }}.active }" ng-controller="MainCtrl" ng-init="init( {{my_items}})">
+                <div class="panel-body">
                 {% if my_items %}
                   <nav>
                     {% if  my_items_count > 10 %}
@@ -100,16 +104,21 @@ within_tertiary
                       </li>
                     </ul>
                   </nav>
+                </div>
+                {% if  my_items_count > 10 %}
+                <div class="panel-footer">
                 <p class="module-footer">
                 <a href="" class="read-more" ng-hide="limit <= facetMinLimit || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit - 10">Less</a>
                 <a href="" class="read-more pull-right" ng-hide="limit >= facetMaxLimit || limit >= {{my_items_count}} || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit + 10">More</a>
                 </p>
+                </div>
+                {% endif %}
 
             {% else %}
               <p class="module-content empty">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</p>
             {% endif %}
+          {% endblock %}
           </div>
-            {% endblock %}
           </section>
 
       {% endif %}

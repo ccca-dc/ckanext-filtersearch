@@ -65,10 +65,11 @@ within_tertiary
             {% set dataset_filters = ['extras_topic_category', 'tags', 'author', 'organization', 'groups', 'license_id', 'frequency', 'res_format', 'extras_specifics'] %}
 {#}class="module-narrow module-shallow"{#}
           <section class="module-narrow module-shallow" >
-          	<h5 class="module-heading">
-             <i> {{ _('Further Filters:') }}</i>
+          	<h2 class="module-heading">
+                <i class="icon-medium icon-chevron"></i>
+                {{ _('Further Filters') }}
           		<a href="{{ h.remove_url_param(dataset_filters,  extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
-            </h5>
+            </h2>
           {% endif %}
         </section>
 
@@ -82,7 +83,6 @@ within_tertiary
                     <i class="icon-medium icon-filter"></i>
                     {% set title = title or h.get_facet_title(name) %}
                     {{ title }}
-                    <i class="icon-medium icon-chevron pull-right"></i>
                 </h3>
                 {% endblock %}
                 </div>

@@ -165,3 +165,19 @@ a.filtersearch_action { /* Copied from spatial query module-heading.action */
 .resource_facet_hint{
   background-color: #b55457;
 }
+
+/* .panel-heading .accordion-toggle:after { */
+/*     /\* symbol for "opening" panels *\/ */
+/*     font-family: 'FontAwesome'; */
+/*     content: "\f077"; */
+/*     font-size: 20px; */
+/*     display: inline-block; */
+/*     vertical-align: middle; */
+/*     float: right;        /\* adjust as needed *\/ */
+/*     color: grey;         /\* adjust as needed *\/ */
+/* } */
+/* .panel-heading .accordion-toggle.collapsed:after { */
+/*     /\* symbol for "collapsed" panels *\/ */
+/*     font-family: 'FontAwesome'; */
+/*     content: "\f078"; */
+/* } */

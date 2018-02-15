@@ -22,17 +22,6 @@ import collections
 import  ckan.plugins.toolkit as tk
 context = tk.c
 
-def get_topic_field():
-    # Get the value of the ckanext.filtersearch.topic_field
-    # setting from the CKAN config file as a string, or False if the setting
-    # isn't in the config file.
-    topic_field = config.get(
-        'ckanext.filtersearch.topic_field', False)
-
-    if topic_field:
-        return 'extras_' + topic_field
-    else:
-        return None
 
 class FiltersearchPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
@@ -50,7 +39,6 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('fanstatic', 'filtersearch')
-        self._topic_field =  get_topic_field()
 
     # ITemplateHelpers
     def get_helpers(self):
@@ -58,7 +46,6 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             'filtersearch_get_topic': helpers.filtersearch_get_topic,
             'filtersearch_get_items': helpers.filtersearch_get_items,
             'filtersearch_get_resource_items': helpers.filtersearch_get_resource_items,
-            'filtersearch_get_topic_field': helpers.filtersearch_get_topic_field,
             'filtersearch_get_bbox': helpers.filtersearch_get_bbox,
             'filtersearch_get_date_value': helpers.filtersearch_get_date_value,
             'filtersearch_get_search_facets_from_fields': helpers.filtersearch_get_search_facets_from_fields,
@@ -80,7 +67,6 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
 
     def _facets(self, facets_dict):
 
-
         # Reorder facets
 
         # Delete facets
@@ -91,16 +77,15 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facets_dict.pop('tags', None)
         facets_dict.pop('author', None)
 
-        # Add them again
-
-        if self._topic_field:
-            facets_dict[self._topic_field] = 'Categories'
-
+        #Add them again
         facets_dict['tags'] = 'Keywords'
         facets_dict['author'] = 'Authors'
         facets_dict['organization'] = 'Organizations'
-        facets_dict['groups'] = 'Groups'
         facets_dict['license_id'] = 'Licenses'
+        facets_dict['groups'] = 'Groups'
+
+
+        #Add frequency
         facets_dict['frequency'] = 'Frequency'
 
         # Get specifc field names for facetting
@@ -135,9 +120,12 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             if x['count'] >= num:
                 facets_dict[x['name']] = x['value']
 
+        print facet_list
 
         # Add Variables:
         facets_dict['extras_specifics_Variables'] = 'Variables'
+
+        #Add formats
         facets_dict['res_format'] = 'Formats'
 
         return facets_dict

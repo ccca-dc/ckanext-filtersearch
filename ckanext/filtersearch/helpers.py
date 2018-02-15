@@ -118,15 +118,6 @@ def filtersearch_get_search_facets_from_fields(m_facets,fields):
     return m_facets
 
 
-def filtersearch_get_topic_field():
-    topic_field = config.get(
-        'ckanext.filtersearch.topic_field', False)
-
-    if topic_field:
-        return 'extras_' + topic_field
-    else:
-        return None
-
 def filtersearch_get_items(facet,extras):
 
      #print "filtersearch**************"
@@ -137,17 +128,8 @@ def filtersearch_get_items(facet,extras):
      #if facet == "par_experiment":
      #print  json.dumps(items)
 
-     if facet == filtersearch_get_topic_field():
-         for x in items:
-             x['href'] = h.remove_url_param(facet, x['name'],extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
-             x['label'] = filtersearch_get_topic(facet, x['name'])
-             x['display_name'] = filtersearch_get_topic(facet, x['name'])
-             x['label_truncated'] =ckan_truncate(x['label'], 22)
-             x['count'] = ('(%d)' % x['count'])
-             x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
-             x['title'] = x['label']
 
-     elif facet == "frequency":
+     if facet == "frequency":
          for x in items:
               x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
               x['label'] =  x['display_name']

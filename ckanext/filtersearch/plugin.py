@@ -43,7 +43,6 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
     # ITemplateHelpers
     def get_helpers(self):
         return {
-            'filtersearch_get_topic': helpers.filtersearch_get_topic,
             'filtersearch_get_items': helpers.filtersearch_get_items,
             'filtersearch_get_resource_items': helpers.filtersearch_get_resource_items,
             'filtersearch_get_bbox': helpers.filtersearch_get_bbox,
@@ -53,9 +52,6 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             'filtersearch_get_fixed_facets': helpers.filtersearch_get_fixed_facets,
             'filtersearch_get_facet_specific_count': helpers.filtersearch_get_facet_specific_count,
         }
-
-    def topic_field (self):
-        return self._topic_field
 
     # IFacets
     def dataset_facets(self, facets_dict, package_type):
@@ -120,7 +116,7 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
             if x['count'] >= num:
                 facets_dict[x['name']] = x['value']
 
-        print facet_list
+        #print facet_list
 
         # Add Variables:
         facets_dict['extras_specifics_Variables'] = 'Variables'

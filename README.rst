@@ -81,8 +81,6 @@ Config Settings
 DEFINE: in development.ini/production.ini
 
 
- ckanext.filtersearch.topic_field = xxxx    (Name of the topic field)
-
 ckanext.filtersearch.facet_matches = yy      (Number of matches necessary to build a dynamic facet of a user given parameter)
 
 

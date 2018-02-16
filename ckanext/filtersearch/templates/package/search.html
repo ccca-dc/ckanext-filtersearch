@@ -48,7 +48,7 @@
 
 {% snippet "spatial/snippets/spatial_query.html" %}
 <hr>
-
+{{super()}} {#} Important - for date facet {#}
 <div class="filters">
   <div ng-app="filtersearchApp">
     {% for facet in c.facet_titles %}

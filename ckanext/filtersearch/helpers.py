@@ -198,31 +198,6 @@ def filtersearch_get_resource_items(facet,extras):
      result = json.dumps(items)
      return result
 
-def filtersearch_get_topic(field, value):
-    #print "#####################################"
-    #print field
-    #print value
-    schema = hs.scheming_dataset_schemas(False)
-    if not schema:
-        return value
-    d_schema = schema['dataset']
-    #pprint.pprint(d_schema['dataset_fields'])
-    if not d_schema:
-        return value
-    if field.startswith('extras_'):
-        real_field = field.split('_',1)[1]
-    else:
-        real_field = field
-    f_schema = hs.scheming_field_by_name(d_schema['dataset_fields'], real_field)
-    if not f_schema:
-        return value
-    #pprint.pprint(f_schema)
-    result = hs.scheming_choices_label(f_schema['choices'], value)
-    if not result:
-        return value
-    #print result
-    return result
-
 def filtersearch_get_bbox(query_string):
 
     q_field = 'ext_bbox'

@@ -47,6 +47,9 @@ within_tertiary
 {% if my_items %}
   {% set my_items_count =  my_items.count('count') %}
 {% endif %}
+{%  if not my_items_count %}
+        {% set my_items_count = 0 %}
+{% endif %}
 
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}

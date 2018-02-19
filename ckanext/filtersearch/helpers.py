@@ -166,6 +166,7 @@ def filtersearch_get_items(facet,extras):
         new_items = []
         for x in items:
             group = _get_group(x['name'])
+            group_type = ''
             if 'type_of_group' in group:
                 group_type = group['type_of_group']
             if group_type:

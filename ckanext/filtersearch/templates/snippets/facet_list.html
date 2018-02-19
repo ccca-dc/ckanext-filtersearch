@@ -92,16 +92,24 @@ within_tertiary
               <div id="facet_{{ facet_id }}" class="collapse" ng-class="{ in: {{ facet_id }}.active }" ng-controller="MainCtrl" ng-init="init( {{my_items}})">
                 <div class="panel-body" style="padding:5px">
                 {% if my_items %}
+
                   <nav>
                     {% if  my_items_count > 10 %}
                     <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
                     {% endif %}
                     {#} Uncomment line below for a useful demonstration of angular {#}
                     {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
-
                     <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
+
                       <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:limit"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
-                         <a ng-href="{ang x.href ang}" title="{ang x.title ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
+                        {% if name == "groups" %}
+                        <span ng-if ="x.count==0">
+                          {ang x.label_truncated ang}
+                       </span>
+                         <a ng-if ="x.count!=0" ng-href="{ang x.href ang}" title="{ang x.title ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
+                      {% else %}
+                      <a ng-href="{ang x.href ang}" title="{ang x.title ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
+                        {%endif%}
                       </li>
                     </ul>
                   </nav>

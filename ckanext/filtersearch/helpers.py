@@ -28,6 +28,8 @@ from ckanext.scheming import helpers as hs
 import pprint # Pretty Print oif dicts :-)
 import ckan.lib.helpers as h
 import json
+from ckanext.scheming import helpers as hs
+
 
 # Potentially for version 2.7 - Kathi
 from webhelpers.text import truncate as ckan_truncate
@@ -35,7 +37,10 @@ from webhelpers.text import truncate as ckan_truncate
 from ckan.common import (
     _, ungettext, g, c, request, session, json, OrderedDict
 )
-
+# Store group_list and group_type_list globally: Anja, 19.2.18
+# to get them only once
+group_list = []
+group_type_list =[]
 
 def filtersearch_get_facet_specific_count():
     num = config.get(
@@ -117,19 +122,86 @@ def filtersearch_get_search_facets_from_fields(m_facets,fields):
 
     return m_facets
 
+def _get_group_index (name,list_of_items):
+    for i, x in enumerate(list_of_items):
+        if x['name'] == name:
+            return i
+    return -1
+
+def _get_group(name):
+    global group_list
+    if not group_list:
+        group_list = logic.get_action('group_list')({}, {'all_fields':True, 'include_extras':True})
+
+    if not group_list:
+        return None
+    result = (item for item in group_list if item["name"] == name).next()
+
+    return result
+
+def _get_group_type_label(name):
+    global group_type_list
+    label = ''
+    if not group_type_list:
+        schema = hs.scheming_group_schemas()
+        group_info = schema['group']
+        field_list = group_info['fields']
+        for x in field_list:
+            if x['field_name'] == 'type_of_group':
+                group_type_list = x['choices']
+
+    if not group_type_list:
+        return ''
+    label = ''
+    for x in group_type_list:
+        if x['value']==name:
+            label = x['label']
+            break
+    return label
 
 def filtersearch_get_items(facet,extras):
 
-     #print "filtersearch**************"
-     #print facet
-     #print extras
+    items = h.get_facet_items_dict(facet, None, False) # 0 is important! means always get all ...
+    if facet == "groups": # rearrange according to type_of_group
+        new_items = []
+        for x in items:
+            group = _get_group(x['name'])
+            group_type = group['type_of_group']
+            group_type_label = _get_group_type_label(group_type)
+            if not new_items or _get_group_index(group_type,new_items) <0:
+                f = {}
+                f['active'] = False
+                f['name'] = group_type
+                f['display_name'] = group_type_label
+                f['href'] = ''
+                f['label'] =  group_type_label +':'
+                f['label_truncated'] =  group_type_label+':'
+                f['count'] = 0 #('(%d)' % 1)
+                f['a'] = None # Angular needs it this way :-)
+                f['title'] = 'Group Type'
+                x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
+                x['label'] =  x['display_name']
+                x['label_truncated'] = ckan_truncate(x['label'], 22)
+                x['count'] = ('(%d)' % x['count'])
+                x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
+                x['title'] = group['description']
+                new_items.append(f)
+                new_items.append(x)
+            else:
+                index=_get_group_index(group_type,new_items)
+                if  index >= 0:
+                    x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
+                    x['label'] =  x['display_name']
+                    x['label_truncated'] = ckan_truncate(x['label'], 22)
+                    x['count'] = ('(%d)' % x['count'])
+                    x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
+                    x['title'] = group['description']
+                    new_items.insert(index+1, x)
 
-     items = h.get_facet_items_dict(facet,0) # 0 is important! means alqway get all ...
-     #if facet == "par_experiment":
-     #print  json.dumps(items)
+        items = new_items
 
 
-     if facet == "frequency":
+    elif facet == "frequency":
          for x in items:
               x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
               x['label'] =  x['display_name']
@@ -146,7 +218,8 @@ def filtersearch_get_items(facet,extras):
                   x['title'] = "Dezember/Januar/Februar"
               else:
                   x['title'] = x['label']
-     else:
+    else:
+         #print items
          for x in items:
              x['href'] = h.remove_url_param(facet, x['name'], extras=extras) if x['active'] else h.add_url_param(new_params={facet: x['name']},extras=extras)
              x['label'] =  x['display_name']
@@ -155,10 +228,10 @@ def filtersearch_get_items(facet,extras):
              x['a'] = "true" if x['active'] else None # Angular needs it this way :-)
              x['title'] = x['label']
 
-
     # remove unicode .... only by dumping to json ...
-     result = json.dumps(items)
-     return result
+    result = json.dumps(items)
+    #print result
+    return result
 
 def filtersearch_get_resource_items(facet,extras):
     # for resources filters on a single package - OEKS15!!!!!!!!!!!! Anja, 27.7.17

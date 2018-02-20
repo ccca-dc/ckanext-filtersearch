@@ -166,8 +166,15 @@ def filtersearch_get_items(facet,extras):
         new_items = []
         for x in items:
             group = _get_group(x['name'])
-            group_type = group['type_of_group']
-            group_type_label = _get_group_type_label(group_type)
+            group_type = ''
+            group_type_label = ''
+            if 'type_of_group' in group:
+                group_type = group['type_of_group']
+            if group_type:
+                group_type_label = _get_group_type_label(group_type)
+            else:
+                group_type = 'other'
+                group_type_label = 'Other'
             if not new_items or _get_group_index(group_type,new_items) <0:
                 f = {}
                 f['active'] = False

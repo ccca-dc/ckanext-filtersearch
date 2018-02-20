@@ -47,6 +47,9 @@ within_tertiary
 {% if my_items %}
   {% set my_items_count =  my_items.count('count') %}
 {% endif %}
+{%  if not my_items_count %}
+        {% set my_items_count = 0 %}
+{% endif %}
 
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}
@@ -94,14 +97,17 @@ within_tertiary
                 {% if my_items %}
 
                   <nav>
-                    {% if  my_items_count > 10 %}
+                    {% if  my_items_count > 10 and name != "groups" %}
                     <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
                     {% endif %}
                     {#} Uncomment line below for a useful demonstration of angular {#}
                     {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
                     <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
-
+                      {% if name != "groups" %}
                       <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:limit"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
+                        {% else %}
+                      <li ng-repeat="x in itemlist |filter: filter_{{name}}"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
+                        {% endif %}
                         {% if name == "groups" %}
                         <span ng-if ="x.count==0">
                           {ang x.label_truncated ang}
@@ -114,7 +120,7 @@ within_tertiary
                     </ul>
                   </nav>
                 </div>
-                {% if  my_items_count > 10 %}
+                {% if  my_items_count > 10 and name != "groups" %}
                 <div class="panel-footer" style="height: 45px">
                 <a href="" class="btn btn-default-gray btn-xs pull-left" ng-hide="limit <= facetMinLimit || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit - 10">Less</a>
                 <a href="" class="btn btn-default-gray btn-xs pull-right" ng-hide="limit >= facetMaxLimit || limit >= {{my_items_count}} || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit + 10">More</a>

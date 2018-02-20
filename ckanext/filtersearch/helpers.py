@@ -82,14 +82,13 @@ def filtersearch_toggle_following(obj_type, obj_id):
 
     '''
     obj_type = obj_type.lower()
-    if obj_type != 'dataset':
-        return ''
+
     # If the user is logged in show the follow/unfollow button
     if c.user:
         #print c
         #context = {'model': model, 'session': model.Session, 'user': c.user}
         context = {'user': c.user}
-        action = 'am_following_dataset'
+        action = 'am_following_%s' % obj_type
         following = logic.get_action(action)(context, {'id': obj_id})
         return filtersearch_snippet('snippets/filtersearch_follow_button.html',
                        following=following,
@@ -161,7 +160,7 @@ def _get_group_type_label(name):
 
 def filtersearch_get_items(facet,extras):
 
-    items = h.get_facet_items_dict(facet, None, False) # 0 is important! means always get all ...
+    items = h.get_facet_items_dict(facet, 0, False) # 0 is important! means always get all ...
     if facet == "groups": # rearrange according to type_of_group
         new_items = []
         for x in items:

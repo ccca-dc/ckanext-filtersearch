@@ -71,9 +71,11 @@ this.ckan.module('filtersearch-follow', function($, _) {
 			this.el.removeClass('disabled');
 			if (options.action == 'follow') {
 				options.action = 'unfollow';
+				this.el.attr('title', "Unfollow");
 				this.el.html('<i class="filtered pill icon-remove-sign red_back"></i> ');
 			} else {
 				options.action = 'follow';
+				this.el.attr('title', "Follow");
 				this.el.html('<i class="filtered pill icon-plus-sign green_back"></i> ');
 			}
 			sandbox.publish('follow-' + options.action + '-' + options.id);

@@ -13,6 +13,6 @@
   </a>
 {% else %}
   <a href="{{ h.url_for(controller=controller, action='follow', id=obj_id) }}" data-toggle="tooltip" title="Follow updates on this {{obj_type}}" data-module="filtersearch-follow" data-module-type="{{ obj_type }}" data-module-id="{{ obj_id }}" data-module-action="follow">
-      <i class="filtered pill icon-plus-sign green_back" style="color: green;"></i>    {#}{{ _('Follow') }}{#}
+      <i class="filtered pill icon-plus-sign green_back"></i>    {#}{{ _('Follow') }}{#}
   </a>
 {% endif %}

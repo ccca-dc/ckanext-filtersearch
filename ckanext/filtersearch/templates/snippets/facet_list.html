@@ -103,8 +103,11 @@ within_tertiary
                     {#} Uncomment line below for a useful demonstration of angular {#}
                     {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
                     <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
-
+                      {% if name != "groups" %}
                       <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:limit"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
+                        {% else %}
+                      <li ng-repeat="x in itemlist |filter: filter_{{name}}"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
+                        {% endif %}
                         {% if name == "groups" %}
                         <span ng-if ="x.count==0">
                           {ang x.label_truncated ang}

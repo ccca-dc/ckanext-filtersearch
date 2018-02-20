@@ -97,7 +97,7 @@ within_tertiary
                 {% if my_items %}
 
                   <nav>
-                    {% if  my_items_count > 10 %}
+                    {% if  my_items_count > 10 and name != "groups" %}
                     <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
                     {% endif %}
                     {#} Uncomment line below for a useful demonstration of angular {#}
@@ -117,7 +117,7 @@ within_tertiary
                     </ul>
                   </nav>
                 </div>
-                {% if  my_items_count > 10 %}
+                {% if  my_items_count > 10 and name != "groups" %}
                 <div class="panel-footer" style="height: 45px">
                 <a href="" class="btn btn-default-gray btn-xs pull-left" ng-hide="limit <= facetMinLimit || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit - 10">Less</a>
                 <a href="" class="btn btn-default-gray btn-xs pull-right" ng-hide="limit >= facetMaxLimit || limit >= {{my_items_count}} || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit + 10">More</a>

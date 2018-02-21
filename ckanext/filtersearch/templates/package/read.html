@@ -60,17 +60,10 @@
     </div>
   </span>
 
-    <h1>
-      {% block page_heading %}
-        {{ pkg.title or pkg.name }}
-        {% if pkg.state.startswith('draft') %}
-          [{{ _('Draft') }}]
-        {% endif %}
-        {% if pkg.state == 'deleted' %}
-          [{{ _('Deleted') }}]
-        {% endif %}
-      {% endblock %}
-    </h1>
+  {% block page_heading %}
+    {{ super() }}
+  {% endblock %}
+
 
     {% if pkg.organization or  pkg.license_id  %}
     <h5>

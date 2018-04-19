@@ -4,7 +4,7 @@
 {% block page_primary_action %}
   {% if h.check_access('package_create') %}
     <div class="page_primary_action">
-      {% link_for _('Add Datapackage'), controller='package', action='new', class_='btn btn-primary', icon='plus-sign-alt' %}
+      {% link_for _('Add Dataset'), controller='package', action='new', class_='btn btn-success pull-right', icon='plus-sign-alt' %}
     </div>
   {% endif %}
 {% endblock %}
@@ -32,20 +32,29 @@
 {% endblock %}
 
 {% block secondary_content %}
-<h2 class="module-heading" style="padding-left:10px;padding-right:10px;padding-top:15px;padding-bottom:15px"><i class="icon-large icon-search"></i> Search and Filter
-<a href="{{ h.url_for(controller='package', action='search')}}"  class="filtersearch_action">{{ _('Clear all') }}</a>
-</h2>
-<div class="module-content"><p>Search datapackages ...</p></div>
-
+<section class="module module-narrow module-shallow">
+    <h2 class="module-heading" style="padding-top:15px"><i class="icon-large icon-search"></i>
+        Search and Filter
+        <a href="{{ h.url_for(controller='package', action='search')}}"  class="action">{{ _('Clear all') }}</a>
+    </h2>
+<div class="module-content">
 {#} Search Bar  {#}
 {% block search %}
       {% snippet 'home/snippets/side_search.html', form_id='dataset-search-form', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, count=c.page.item_count, facets=facets, show_empty=request.params, error=c.query_error, fields=c.fields %}
 {% endblock %}
-
+</div>
+</section>
+<hr>
 
 {% snippet "spatial/snippets/spatial_query.html" %}
-
-{{ super() }}
-
-
+<hr>
+{{super()}} {#} Important - for date facet {#}
+<div class="filters">
+  <div ng-app="filtersearchApp">
+    {% for facet in c.facet_titles %}
+      {{ h.snippet('snippets/facet_list.html', title=c.facet_titles[facet], name=facet) }}
+    {% endfor %}
+  </div>
+  <a class="close no-text hide-filters"><i class="icon-remove-sign"></i><span class="text">close</span></a>
+</div>
 {% endblock %}

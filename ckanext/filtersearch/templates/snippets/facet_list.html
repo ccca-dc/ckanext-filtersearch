@@ -1,3 +1,6 @@
+{% resource 'filtersearch/angular' %}
+{% resource 'filtersearch/filtersearch.css' %}
+
 {#
 Construct a facet module populated with links to filtered results.
 
@@ -44,6 +47,9 @@ within_tertiary
 {% if my_items %}
   {% set my_items_count =  my_items.count('count') %}
 {% endif %}
+{%  if not my_items_count %}
+        {% set my_items_count = 0 %}
+{% endif %}
 
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}
@@ -58,73 +64,79 @@ within_tertiary
       {% block facet_list_item %}
           {#} First Dataset Filter Item {#}
           {#} There might be better solutions, but would involve various plugins ..., Anja 28.7{#}
-          {% if name == "extras_iso_tpCat" %}
-            {% set dataset_filters = ['extras_iso_tpCat', 'tags', 'author', 'organization', 'groups', 'license_id'] %}
+          {#} TODO: get list of possible facets - Anja 16.2.2018 {#}
+          {% if name == "tags" %}
+            {% set dataset_filters = ['tags', 'author', 'organization', 'groups', 'license_id', 'frequency', 'res_format', 'extras_specifics', 'extras_specifics_Variables'] %}
 {#}class="module-narrow module-shallow"{#}
           <section class="module-narrow module-shallow" >
-          	<h5 class="module-heading">
-             <i> {{ _('Datapackage Filters:') }}</i>
+          	<h2 class="module-heading" style="padding-bottom:10px">
+                <i class="icon-medium icon-filter"></i>
+                {{ _('Further Filters') }}
           		<a href="{{ h.remove_url_param(dataset_filters,  extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
-            </h5>
-          {% endif %}
-        </section>
-
-      {% if name == "res_format" %} {#} First Resource Filter Item {#}
-        {% set resource_filters = ['res_format', 'res_extras_par_model', 'res_extras_par_experiment', 'res_extras_par_frequency', 'res_extras_par_variables', 'res_extras_par_ensemble'] %}
-        <section>
-            <br>
-            <h3 class="module-heading" >
-            {% set title = "Resource Filters:" %}
-            <a href="{{ h.remove_url_param(resource_filters, extras=extras)  }}" class="filtersearch_action">{{ _('Clear') }}</a>
-            <i>{{ title }}</i>
-          </h3>
-        </section>
-        {% endif %}
-
-        <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
-          {% block facet_list_heading %}
-              {% if name.startswith('res_') and my_items_count > 0 %}
-              <h2 class="module-heading accordion-toggle my_toggle_note" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">
-              {% else %}
-              <h2 class="module-heading accordion-toggle" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">
-              {% endif %}
-              <i class="icon-medium icon-filter"></i>
-              {% set title = title or h.get_facet_title(name) %}
-              {{ title }}
-              <i class="icon-medium icon-chevron pull-right"></i>
             </h2>
-          {% endblock %}
-          {% block facet_list_items %}
-            <div id="facet_{{ facet_id }}" class="collapse" ng-class="{ in: {{ facet_id }}.active }" ng-controller="MainCtrl" ng-init="init( {{my_items}})">
-
-              {% if my_items %}
-                <nav>
-                  {% if  my_items_count > 10 %}
-                  <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
-                  {% endif %}
-                  {#} Uncomment line below for a useful demonstration of angular {#}
-                  {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
-
-                  <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
-                    <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:limit"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
-                       <a ng-href="{ang x.href ang}" title="{ang x.title ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
-                    </li>
-                  </ul>
-                </nav>
-              <p class="module-footer">
-              <a href="" class="read-more" ng-hide="limit <= facetMinLimit || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit - 10">Less</a>
-              <a href="" class="read-more pull-right" ng-hide="limit >= facetMaxLimit || limit >= {{my_items_count}} || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit + 10">More</a>
-              </p>
-
-          {% else %}
-            <p class="module-content empty">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</p>
           {% endif %}
-        </div>
-          {% endblock %}
         </section>
+
+          {% if  my_items_count > 0 %} {#} Show only facets that have matches {#}
+
+            <section class="{{ wrapper_class or 'facet-filter' }}">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="padding:5px">
+            {% block facet_list_heading %}
+                <h3 class="module-heading accordion-toggle" data-toggle="collapse" data-target="#facet_{{ facet_id }}" ng-class="{ collapsed: !{{ facet_id }}.active }" title="Total: {{my_items_count}}">
+                    {% set title = title or h.get_facet_title(name) %}
+                    {{ title }}
+                    <i class="icon-medium icon-chevron pull-right"></i>
+                </h3>
+                {% endblock %}
+                </div>
+
+            {% block facet_list_items %}
+              <div id="facet_{{ facet_id }}" class="collapse" ng-class="{ in: {{ facet_id }}.active }" ng-controller="MainCtrl" ng-init="init( {{my_items}})">
+                <div class="panel-body" style="padding:5px">
+                {% if my_items %}
+
+                  <nav>
+                    {% if  my_items_count > 10 and name != "groups" %}
+                    <p><input  id="id_{{name}}" type="text" ng-model="filter_{{name}}.label" placeholder="Start typing ..." ng-click="filter_{{name}}.label = ''"></p>
+                    {% endif %}
+                    {#} Uncomment line below for a useful demonstration of angular {#}
+                    {#}<p> {ang filter_{{name}} ang}  Should appear here</p>{#}
+                    <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
+                      {% if name != "groups" %}
+                      <li ng-repeat="x in itemlist |filter: filter_{{name}} | limitTo:limit"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
+                        {% else %}
+                      <li ng-repeat="x in itemlist |filter: filter_{{name}}"  class="{{ nav_item_class or 'nav-item'}} {ang x.a ? 'active' : '' ang}">
+                        {% endif %}
+                        {% if name == "groups" %}
+                        <span ng-if ="x.count==0">
+                          {ang x.label_truncated ang}
+                       </span>
+                         <a ng-if ="x.count!=0" ng-href="{ang x.href ang}" title="{ang x.title ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
+                      {% else %}
+                      <a ng-href="{ang x.href ang}" title="{ang x.title ang}">  <span>{ang x.label_truncated ang} {ang x.count ang} </span></a>
+                        {%endif%}
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+                {% if  my_items_count > 10 and name != "groups" %}
+                <div class="panel-footer" style="height: 45px">
+                <a href="" class="btn btn-default-gray btn-xs pull-left" ng-hide="limit <= facetMinLimit || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit - 10">Less</a>
+                <a href="" class="btn btn-default-gray btn-xs pull-right" ng-hide="limit >= facetMaxLimit || limit >= {{my_items_count}} || facetMinLimit >= {{my_items_count}}"  ng-click="limit = limit + 10">More</a>
+                </div>
+                {% endif %}
+
+            {% else %}
+              <p class="module-content empty">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</p>
+            {% endif %}
+          {% endblock %}
+          </div>
+          </section>
+
+      {% endif %}
+
       {% endblock %}
     {% endif %}
   {% endwith %}
 {% endblock %}
-
-{% resource 'filtersearch/angular' %}

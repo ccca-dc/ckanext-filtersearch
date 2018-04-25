@@ -2,11 +2,13 @@
 
 {#} Rename {#}
 {% block page_primary_action %}
+{#} Anja, 25.4.18: 'Add Dataset' only within dashboard
   {% if h.check_access('package_create') %}
     <div class="page_primary_action">
       {% link_for _('Add Dataset'), controller='package', action='new', class_='btn btn-success pull-right', icon='plus-sign-alt' %}
     </div>
   {% endif %}
+  {#}
 {% endblock %}
 
 {% block form %}

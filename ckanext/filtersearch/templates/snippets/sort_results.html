@@ -39,6 +39,21 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
   {% endblock %}
 
   {% block search_sortby %}
+    {% if sorting %}
+        <div class="form-select control-group control-order-by pull-right">
+          <label for="field-order-by">{{ _('Order by') }}</label>
+          <select id="field-order-by" name="sort" class="ccca-order-by">
+            {% for label, value in sorting %}
+              {% if label and value %}
+                <option value="{{ value }}"{% if sorting_selected == value %} selected="selected"{% endif %}>{{ label }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          {% block search_sortby_button %}
+          <button class="btn js-hide" type="submit">{{ _('Go') }}</button>
+          {% endblock %}
+        </div>
+      {% endif %}
   {% endblock %}
 
   {% block search_title %}

@@ -32,8 +32,14 @@
           <i class="icon-lock"></i>
           {{ _('Private') }}
         </span>
-        <br><br>
+        <br>
      {% endif %}
+
+     {% block dataset_basket %}
+     {{ super() }}
+     <br><br>
+     {% endblock %}
+
 
    <dt><i>{{ _('Followers: ') }}</i> {{ h.SI_number_span(h.follow_count('dataset', pkg.id)) }}  </dt>
      {% if pkg.tracking_summary %}

@@ -38,6 +38,7 @@
         <br>
      {% endif %}
 
+     <section data-step="6" data-intro="Here you can add this dataset to one of your baskets (if you have already created a basket), follow it or share it on social media.">
      {% block dataset_basket %}
      {{ super() }}
      <br><br>
@@ -57,6 +58,7 @@
        <a href="https://twitter.com/share?url={{ current_url }}" target="_blank" data-toggle="tooltip" title="Share on Twitter"><i style="color:#57c1df" class="icon-twitter-sign"></i> </a>
        <a href="https://plus.google.com/share?url={{ current_url }}" target="_blank" data-toggle="tooltip" title="Share on Google+" class="nav-item"><i style="color:#ea4335" class="icon-google-plus-sign"></i> </a>
    </dt>
+    </section>
 
      {% if pkg.groups %}
      <br>

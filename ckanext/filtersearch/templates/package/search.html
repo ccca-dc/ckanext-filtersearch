@@ -36,11 +36,11 @@
 
 {% block secondary_content %}
 <section class="module module-narrow module-shallow">
-    <h2 class="module-heading" style="padding-top:15px"><i class="icon-large icon-search"></i>
+    <h2 class="module-heading" style="padding-top:15px" data-step="1" data-tooltipclass='introjs-ttip' data-intro="Hi! Let me explain this page to you! You are currently on the datasets page, where you can see all public datasets. You can easily browse through all the datasets on the right or you can search for specific datasets or filter them below. IMPORTANT: you can't do anything wrong on this page, so just freely explore this page. Have fun!"><i class="icon-large icon-search"></i>
         Search and Filter
         <a href="{{ h.url_for(controller='package', action='search')}}"  class="action">{{ _('Clear all') }}</a>
     </h2>
-<div class="module-content">
+<div class="module-content" data-step="2" data-tooltipclass='introjs-ttip' data-intro="In this field you can enter what you are looking for. This can be anything like the name of the dataset, the name of the author etc.">
 {#} Search Bar  {#}
 {% block search %}
       {% snippet 'home/snippets/side_search.html', form_id='dataset-search-form', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, count=c.page.item_count, facets=facets, show_empty=request.params, error=c.query_error, fields=c.fields %}

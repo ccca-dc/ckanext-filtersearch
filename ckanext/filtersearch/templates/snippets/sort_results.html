@@ -78,7 +78,20 @@ Patch 17.5 to display Badges at the top as well for orgs and groups:
         <p class="filter-list">
         {% for field in facets.fields %}
           {% set search_facets_items = facets.search.get(field)['items'] %}
-          <span class="facet">{{ facets.titles.get(field) }}:</span>
+          {% set f_title = facets.titles.get(field) %}
+          {% if not f_title and q_string %}
+            {% set f_title = q_string.split('=')[0]%}
+              {% if not f_title  %}
+                {% set f_title = '' %}
+              {% else %}
+                {% if 'author' in f_title %}
+                  {% set f_title = 'Author' %}
+                {% elif 'maintainer' in f_title %}
+                    {% set f_title = 'Maintainer' %}
+                {% endif %}
+              {% endif %}
+          {% endif %}
+          <span class="facet">{{ f_title }}:</span>
           {% for value in facets.fields[field] %}
 
                 <span class="filtered pill">

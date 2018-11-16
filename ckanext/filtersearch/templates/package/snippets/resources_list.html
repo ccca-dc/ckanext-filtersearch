@@ -10,7 +10,11 @@ Example:
 
 #}
 {#} Attention: clear right important :-), Anja, 22.12.2017 {#}
-<section id="dataset-resources" class="resources" style="clear:right">
+<section id="dataset-resources" class="resources" style="clear:right" data-step="4"
+data-intro="These are the dataset's resources!
+A dataset must have at least one resource, these resources represent the different distributions (.nc, .csv, .pdf,...).
+This dataset has {{resources|length}} {% if resources|length == 1 %} resource{% else %} resources{% endif %}.
+You can click on each resource to go to its individual page.">
   <h3>{{ _('Resources') }}</h3>
   {% block resource_list %}
     {% if resources %}

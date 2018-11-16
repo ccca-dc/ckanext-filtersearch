@@ -20,8 +20,11 @@
 
 <span  style="margin-left:0px; float:right;padding-left:15px;padding-button:15px;" >
   <div align="right">
+      <a class="btn btn-sm" href="javascript:void(0);" onclick="javascript:introJs().setOption('tooltipClass', 'customDefault').setOption('showProgress', true).start();" title="Explain me this page">
+        <i class="icon-question-sign icon-2x"></i>
+      </a>
       {% if h.check_access('package_update', {'id':pkg.id }) %}
-        <span>
+        <span data-step="7" data-intro="Here you can edit the dataset.">
         {% link_for _('Manage'), controller='package', action='edit', id=pkg.name, class_='btn btn-primary', icon='wrench'%}
         </span>
         <br> <br>
@@ -35,6 +38,7 @@
         <br>
      {% endif %}
 
+     <section data-step="6" data-intro="Here you can add this dataset to one of your baskets (if you have already created a basket). Baskets are there to memorise and group datasets of special importance for yourself. As a logged-in user you can also follow the dataset on this site or you can share it on social media.">
      {% block dataset_basket %}
      {{ super() }}
      <br><br>
@@ -54,6 +58,7 @@
        <a href="https://twitter.com/share?url={{ current_url }}" target="_blank" data-toggle="tooltip" title="Share on Twitter"><i style="color:#57c1df" class="icon-twitter-sign"></i> </a>
        <a href="https://plus.google.com/share?url={{ current_url }}" target="_blank" data-toggle="tooltip" title="Share on Google+" class="nav-item"><i style="color:#ea4335" class="icon-google-plus-sign"></i> </a>
    </dt>
+    </section>
 
      {% if pkg.groups %}
      <br>

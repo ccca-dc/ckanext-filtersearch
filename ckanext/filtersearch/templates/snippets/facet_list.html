@@ -68,7 +68,7 @@ within_tertiary
           {% if name == "tags" %}
             {% set dataset_filters = ['tags', 'author', 'organization', 'groups', 'license_id', 'frequency', 'res_format', 'extras_specifics', 'extras_specifics_Variables'] %}
 {#}class="module-narrow module-shallow"{#}
-          <section class="module-narrow module-shallow" >
+          <section class="module-narrow module-shallow" data-step="5" data-tooltipclass='introjs-ttip' data-intro="Here you can specify further options concerning the search. Especially the 'Groups' section might deserve your attention: Datasets are being grouped according to different criterias like 'projects', 'methods', etc. and you can get all datasets of a specific group.">
           	<h2 class="module-heading" style="padding-bottom:10px">
                 <i class="icon-medium icon-filter"></i>
                 {{ _('Further Filters') }}

@@ -22,6 +22,7 @@ import collections
 import  ckan.plugins.toolkit as tk
 context = tk.c
 
+from ckan.lib.munge import munge_title_to_name
 
 class FiltersearchPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
@@ -88,6 +89,9 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         #data_dict={'sort': None, 'fq': '', 'rows': 1, 'facet.field': [ 'extras_specifics' ], 'q': u'', 'start': 0, 'extras': {}}
         #data_dict={'sort': None, 'fq': '', 'facet.field': [ 'extras_specifics' ],'q': u''}
         #data_dict={'sort': None, 'fq': '+dataset_type:dataset','q': u'extras_specifics:[\'\' TO *]'}
+
+
+        #form automatic search facets based on key_value pairs in specifics
         data_dict={'sort': None, 'fq': '+dataset_type:dataset','q': u'extras_specifics:*'}
 
         query = tk.get_action('package_search')({}, data_dict)
@@ -95,7 +99,15 @@ class FiltersearchPlugin(plugins.SingletonPlugin):
         facet_list =[]
         for x in query['results']:
             for y in x['specifics']:
+                # Anja, 23.11.2018:
+                # Check if there are spaces or special characters - not supported!
+                orgname = y['name']
+                lowername = orgname.lower()
+                clearname = munge_title_to_name(lowername)
+                if clearname != lowername:
+                    continue
                 facet_name = 'extras_specifics_' + y['name']
+                facet_name = 'extras_specifics_' + orgname
                 if not any(facet_name in f['name'] for f in facet_list):
                     f = {}
                     f['name'] = facet_name
